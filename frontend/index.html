@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rootline | Secure CTF Hosting and Scoring Platform</title>
+<meta name="description" content="Host capture-the-flag events with hashed flags, rate-limited submissions, role-based access and a full audit trail.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<div class="banner">Spring CTF registration is open.<a href="register.html">Create your team</a></div>
+
+<header class="nav">
+  <div class="wrap nav__in">
+    <a href="index.html" class="brand">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3v18"/><path d="M12 11l-6 6"/><path d="M12 11l6 6"/><path d="M8 3h8"/></svg>
+      rootline
+    </a>
+    <ul class="menu">
+      <li><button class="caret">Platform</button>
+        <div class="drop">
+          <a href="#platform"><b>Challenge board</b><span>Categories, difficulty, hints and files</span></a>
+          <a href="#platform"><b>Flag checking</b><span>Hashed flags and rate limits</span></a>
+          <a href="#platform"><b>Dynamic scoring</b><span>Points that change with solves</span></a>
+          <a href="#platform"><b>Audit log</b><span>Every login, guess and admin change</span></a>
+        </div></li>
+      <li><button class="caret">Categories</button>
+        <div class="drop">
+          <a href="#categories"><b>Web exploitation</b><span>Injection, auth bypass, XSS</span></a>
+          <a href="#categories"><b>Cryptography</b><span>Ciphers, hashes, key misuse</span></a>
+          <a href="#categories"><b>Forensics</b><span>Disk, memory and packet analysis</span></a>
+          <a href="#categories"><b>Reverse and pwn</b><span>Binaries, memory and shellcode</span></a>
+        </div></li>
+      <li><a href="#security">Security</a></li>
+      <li><a href="rules.html">Rules</a></li>
+      <li class="menu__m"><a href="login.html">Sign in</a></li>
+    </ul>
+    <div class="nav__sp"></div>
+    <div class="nav__r">
+      <a class="btn hide-s" href="login.html">Sign in</a>
+      <a class="btn btn--w" href="register.html">Join event</a>
+      <button class="burger" aria-label="Menu">Menu</button>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap hero__g">
+    <div>
+      <small>Secure CTF hosting and scoring platform</small>
+      <h1>make every flag count.</h1>
+      <p class="hero__lead">Rootline is the fastest way to run a capture-the-flag event. Define challenges, check flags, score teams and log every move. One platform, locked down by default.</p>
+      <div class="hero__row">
+        <a class="btn btn--w btn--lg" href="register.html">Join event</a>
+        <a class="btn btn--lg" href="login.html">Sign in</a>
+      </div>
+    </div>
+    <div class="win">
+      <div class="win__bar"><i></i><i></i><i></i><span>challenges/sql_login_bypass.py</span></div>
+<pre class="code" id="hero-code"><span class="k">from</span> rootline <span class="k">import</span> challenge, award, log
+
+<span class="f">@challenge</span>(
+    id=<span class="s">"sql-login-bypass"</span>,
+    category=<span class="s">"web"</span>,
+    points=<span class="n">300</span>,
+    rate_limit=<span class="s">"10/min"</span>,
+)
+<span class="k">def</span> <span class="f">check</span>(submission):
+    digest = <span class="f">sha256</span>(submission.flag)
+
+    <span class="k">if not</span> <span class="f">compare</span>(digest, STORED_HASH):
+        <span class="f">log</span>(<span class="s">"wrong_flag"</span>, team=submission.team)
+        <span class="k">return</span> <span class="f">Wrong</span>()
+
+    <span class="f">award</span>(submission.team, points=<span class="n">300</span>)
+    <span class="k">return</span> <span class="f">Correct</span>()</pre>
+      <pre class="code out" id="hero-out" aria-live="polite"></pre>
+    </div>
+  </div>
+</section>
+
+<!-- STRIP -->
+<section class="strip">
+  <div class="wrap strip__in">
+    <p>Built for teams like</p>
+    <div class="marquee" aria-label="Example team names">
+      <div class="marquee__track">
+        <div class="marquee__grp"><span>nullbyte</span><span>r00tkit</span><span>stackoverflown</span><span>segfault</span><span>0xdeadbeef</span><span>packet_loss</span><span>sudo_su</span><span>kernel_panic</span><span>root_cause</span><span>zero_day</span><span>null_pointer</span><span>fuzzy_bunny</span></div>
+        <div class="marquee__grp" aria-hidden="true"><span>nullbyte</span><span>r00tkit</span><span>stackoverflown</span><span>segfault</span><span>0xdeadbeef</span><span>packet_loss</span><span>sudo_su</span><span>kernel_panic</span><span>root_cause</span><span>zero_day</span><span>null_pointer</span><span>fuzzy_bunny</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DX / BOARD -->
+<section class="section" id="platform">
+  <div class="wrap">
+    <div class="section-title">
+      <h2>the board players actually want to use.</h2>
+      <p>Admins publish challenges. Players filter, solve and submit. Nothing to install, and every target is authorized.</p>
+    </div>
+    <div class="big" id="board">
+      <div class="big__top">
+        <div class="side">
+          <p>VIEW</p>
+          <button type="button" class="on" data-cat="all">All challenges <em>7</em></button>
+          <p>CATEGORIES</p>
+          <button type="button" data-cat="web">Web <em>2</em></button>
+          <button type="button" data-cat="crypto">Crypto <em>2</em></button>
+          <button type="button" data-cat="forensics">Forensics <em>1</em></button>
+          <button type="button" data-cat="reverse">Reverse <em>1</em></button>
+          <button type="button" data-cat="pwn">Pwn <em>1</em></button>
+        </div>
+        <div class="board">
+          <div class="board__h">
+            <div><b>Challenges</b><span class="sub" id="b-count">7 shown · 3 solved</span></div>
+            <div class="tags"><button type="button" class="tag on" data-diff="all">All</button><button type="button" class="tag" data-diff="easy">Easy</button><button type="button" class="tag" data-diff="medium">Medium</button><button type="button" class="tag" data-diff="hard">Hard</button></div>
+          </div>
+          <div class="rows">
+            <div class="row h"><span>Name</span><span>Category</span><span>Difficulty</span><span>Points</span><span>Status</span></div>
+            <div class="row" data-cat="web" data-diff="medium" data-solved="1"><span class="nm">Login bypass</span><span data-l="Category">web</span><span data-l="Difficulty" class="d-med">medium</span><span data-l="Points" class="mono">300</span><span data-l="Status" class="ok">solved</span></div>
+            <div class="row" data-cat="web" data-diff="easy" data-solved="1"><span class="nm">Cookie monster</span><span data-l="Category">web</span><span data-l="Difficulty" class="d-easy">easy</span><span data-l="Points" class="mono">150</span><span data-l="Status" class="ok">solved</span></div>
+            <div class="row" data-cat="crypto" data-diff="easy" data-solved="1"><span class="nm">Caesar's second try</span><span data-l="Category">crypto</span><span data-l="Difficulty" class="d-easy">easy</span><span data-l="Points" class="mono">100</span><span data-l="Status" class="ok">solved</span></div>
+            <div class="row" data-cat="crypto" data-diff="medium"><span class="nm">Weak RSA</span><span data-l="Category">crypto</span><span data-l="Difficulty" class="d-med">medium</span><span data-l="Points" class="mono">300</span><span data-l="Status" class="no">open</span></div>
+            <div class="row" data-cat="forensics" data-diff="medium"><span class="nm">Ghost in the pcap</span><span data-l="Category">forensics</span><span data-l="Difficulty" class="d-med">medium</span><span data-l="Points" class="mono">250</span><span data-l="Status" class="no">open</span></div>
+            <div class="row" data-cat="pwn" data-diff="hard"><span class="nm">Stack smash 101</span><span data-l="Category">pwn</span><span data-l="Difficulty" class="d-hard">hard</span><span data-l="Points" class="mono">500</span><span data-l="Status" class="no">open</span></div>
+            <div class="row" data-cat="reverse" data-diff="hard"><span class="nm">Crackme.exe</span><span data-l="Category">reverse</span><span data-l="Difficulty" class="d-hard">hard</span><span data-l="Points" class="mono">450</span><span data-l="Status" class="no">open</span></div>
+            <div class="row empty" id="b-empty" hidden>No challenges match these filters.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="big__foot">
+      <p>Flags are stored as hashes and checked on the server. The board only ever shows what a player is allowed to see.</p>
+      <a class="btn btn--lg" href="register.html">Start playing</a>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURE TABS -->
+<section class="section">
+  <div class="wrap">
+    <div class="section-title"><h2>everything a ctf needs; everything you don't want to build.</h2></div>
+    <div class="ft" data-tabs>
+      <div class="ft__list">
+        <div class="ft__item on" data-tab="a"><span class="lab">Challenges</span><h3>Know what's live</h3>
+          <div class="body"><p>Create, schedule and hide challenges from one admin panel. Attach files, add paid hints and set categories and difficulty.</p><a class="lnk" href="#">See how it works<i class="ar">→</i></a></div></div>
+        <div class="ft__item" data-tab="b"><span class="lab">Flag checking</span><h3>Know what's correct</h3>
+          <div class="body"><p>Every submission is validated, rate limited and compared against a stored hash. Brute-forcing a flag gets a team locked out, not ahead.</p><a class="lnk" href="#">See how it works<i class="ar">→</i></a></div></div>
+        <div class="ft__item" data-tab="c"><span class="lab">Scoring</span><h3>Know what it's worth</h3>
+          <div class="body"><p>Points decay as more teams solve a challenge, so a hard first blood is worth more than the fifteenth easy copy.</p><a class="lnk" href="#">See how it works<i class="ar">→</i></a></div></div>
+        <div class="ft__item" data-tab="d"><span class="lab">Audit log</span><h3>Know what happened</h3>
+          <div class="body"><p>Logins, lockouts, wrong flags and admin edits are written to an immutable log you can filter and export after the event.</p><a class="lnk" href="#">See how it works<i class="ar">→</i></a></div></div>
+      </div>
+      <div class="ft__view">
+        <div class="panel on" data-panel="a">
+          <div class="win__bar"><i></i><i></i><i></i><span>admin / challenges</span></div>
+          <div class="inner">
+            <div class="line"><span>Login bypass</span><span>web · 300 · live</span></div>
+            <div class="line"><span>Ghost in the pcap</span><span>forensics · 250 · live</span></div>
+            <div class="line"><span>Stack smash 101</span><span>pwn · 500 · live</span></div>
+            <div class="line"><span>Heap of trouble</span><span>pwn · 600 · scheduled 18:00</span></div>
+            <div class="line"><span>Final boss</span><span>misc · 800 · hidden</span></div>
+          </div>
+        </div>
+        <div class="panel" data-panel="b">
+          <div class="win__bar"><i></i><i></i><i></i><span>submit / challenge 14</span></div>
+<pre class="code"><span class="c">$ submit --challenge 14 --team nullbyte</span>
+format check     <span class="s">ok</span>
+rate limit       <span class="s">3 of 10 this minute</span>
+hash compare     <span class="s">match</span>
+awarded          <span class="n">+300</span>
+
+<span class="c">$ submit --challenge 14 --team r00tkit</span>
+format check     <span class="s">ok</span>
+rate limit       <span class="r">10 of 10 reached</span>
+result           <span class="r">locked for 60s</span></pre>
+        </div>
+        <div class="panel" data-panel="c">
+          <div class="win__bar"><i></i><i></i><i></i><span>scoring / stack-smash-101</span></div>
+          <div class="inner">
+            <div class="line"><span>Base points</span><span>500</span></div>
+            <div class="line"><span>Minimum points</span><span>100</span></div>
+            <div id="decay" class="decay-chart"></div>
+            <div class="slide slide--s"><label for="decay-in" id="decay-out">Next solve: 500 pts</label><input id="decay-in" type="range" min="0" max="19" step="1" value="0" aria-label="Solves so far"></div>
+            <p class="cap">Drag the slider or move over the curve. Each solve lowers the value of the next one.</p>
+          </div>
+        </div>
+        <div class="panel" data-panel="d">
+          <div class="win__bar"><i></i><i></i><i></i><span>admin / audit log</span></div>
+          <div class="inner">
+            <div class="line"><span>14:02:11 · nullbyte · flag #14</span><span>correct</span></div>
+            <div class="line"><span>14:01:48 · r00tkit · flag #09</span><span>wrong</span></div>
+            <div class="line"><span>14:01:12 · unknown · login x5</span><span>locked</span></div>
+            <div class="line"><span>13:58:40 · admin · edited #22</span><span>logged</span></div>
+            <div class="line"><span>13:55:03 · admin · banned user 31</span><span>logged</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT RUNS -->
+<section class="section">
+  <div class="wrap">
+    <div class="section-title"><h2>how a round runs.</h2><p>From the first challenge to the final report, in three stages.</p></div>
+    <div class="sec">
+      <div><span class="lab">Before the event</span><h3>Set it up</h3><p>Create the event, add challenges and categories, set start and end times, and invite teams.</p></div>
+      <div><span class="lab">During the event</span><h3>Let teams play</h3><p>Players solve, submit flags and climb. Rate limits and lockouts handle the rest.</p></div>
+      <div><span class="lab">After the event</span><h3>Review the round</h3><p>Filter the audit log, see which skills were hardest and export the results.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- CATEGORIES -->
+<section class="section" id="categories">
+  <div class="wrap">
+    <div class="section-title"><h2>make any skill testable, scored and logged.</h2><p>Six categories cover the skills a CTF is built to teach. Add your own from the admin panel.</p></div>
+    <div class="uc">
+      <a href="login.html"><h3>Web exploitation</h3><p>SQL injection, broken access control, XSS and session flaws against a sandboxed target.</p><span>Browse web<i class="ar">→</i></span></a>
+      <a href="login.html"><h3>Cryptography</h3><p>Classical ciphers, weak hashes, bad randomness and misused keys.</p><span>Browse crypto<i class="ar">→</i></span></a>
+      <a href="login.html"><h3>Forensics</h3><p>Packet captures, disk images and memory dumps with a story to uncover.</p><span>Browse forensics<i class="ar">→</i></span></a>
+      <a href="login.html"><h3>Reverse engineering</h3><p>Read a binary, find the check, recover the flag without the source.</p><span>Browse reverse<i class="ar">→</i></span></a>
+      <a href="login.html"><h3>Binary exploitation</h3><p>Stack and heap bugs on isolated services you are authorized to attack.</p><span>Browse pwn<i class="ar">→</i></span></a>
+      <a href="login.html"><h3>Misc and OSINT</h3><p>Puzzles, steganography and open-source research with no tools required.</p><span>Browse misc<i class="ar">→</i></span></a>
+    </div>
+  </div>
+</section>
+
+<!-- BEFORE / AFTER -->
+<section class="section">
+  <div class="wrap">
+    <div class="section-title"><h2>it doesn't have to be hard.</h2><p>Running a CTF on spreadsheets and chat channels breaks the moment teams get competitive. Drag the line.</p></div>
+    <div class="cmp" id="cmp" style="--p:50%">
+      <div class="cmp__layer cmp__after"><span class="cmp__tag cmp__tag--r">After</span><div class="cmp__rows"><div class="crow"><span class="crow__k">Flags</span><span class="crow__v">sha256 hashes</span><span class="crow__v">checked on the server</span><span class="crow__s good">fixed</span></div><div class="crow"><span class="crow__k">Scoring</span><span class="crow__v">points awarded</span><span class="crow__v">automatically on solve</span><span class="crow__s good">fixed</span></div><div class="crow"><span class="crow__k">Passwords</span><span class="crow__v">bcrypt hashes</span><span class="crow__v">role-based access</span><span class="crow__s good">fixed</span></div><div class="crow"><span class="crow__k">Guessing</span><span class="crow__v">10 attempts a minute</span><span class="crow__v">then a lockout</span><span class="crow__s good">fixed</span></div><div class="crow"><span class="crow__k">Evidence</span><span class="crow__v">every action logged</span><span class="crow__v">filter and export</span><span class="crow__s good">fixed</span></div><div class="crow"><span class="crow__k">Rankings</span><span class="crow__v">live ranking</span><span class="crow__v">for signed-in players</span><span class="crow__s good">fixed</span></div></div></div>
+      <div class="cmp__layer cmp__before"><span class="cmp__tag">Before</span><div class="cmp__rows"><div class="crow"><span class="crow__k">Flags</span><span class="crow__v">flags.txt</span><span class="crow__v">pasted in a chat channel</span><span class="crow__s bad">broken</span></div><div class="crow"><span class="crow__k">Scoring</span><span class="crow__v">scores.xlsx</span><span class="crow__v">edited by hand</span><span class="crow__s bad">broken</span></div><div class="crow"><span class="crow__k">Passwords</span><span class="crow__v">one shared password</span><span class="crow__v">stored in plain text</span><span class="crow__s bad">broken</span></div><div class="crow"><span class="crow__k">Guessing</span><span class="crow__v">unlimited attempts</span><span class="crow__v">brute force wins</span><span class="crow__s bad">broken</span></div><div class="crow"><span class="crow__k">Evidence</span><span class="crow__v">no activity log</span><span class="crow__v">nobody knows who solved what</span><span class="crow__s bad">broken</span></div><div class="crow"><span class="crow__k">Rankings</span><span class="crow__v">copy-pasted by hand</span><span class="crow__v">out of date in minutes</span><span class="crow__s bad">broken</span></div></div></div>
+      <div class="cmp__bar" id="cmp-bar" role="slider" tabindex="0" aria-label="Drag to compare before and after" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"><span class="cmp__knob">&#8249; &#8250;</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- SCALE + CHART -->
+<section class="section">
+  <div class="wrap">
+    <div class="section-title"><h2>watch the skills unfold, hour by hour.</h2><p>It plays on its own. Drag the slider to scrub through the event. See which categories teams crack first and where they get stuck.</p></div>
+    <div class="scale">
+      <div><h3>Guardrails for play</h3><p>Rate limits, lockouts and attempt caps keep one team from drowning the rest.</p><a class="lnk" href="#security">See security<i class="ar">→</i></a></div>
+      <div><h3>Faster troubleshooting</h3><p>Filter the log by team, challenge or result to find the exact moment something broke.</p><a class="lnk" href="#security">See audit log<i class="ar">→</i></a></div>
+      <div><h3>Skills at a glance</h3><p>Solves per category show which skills your players are strong and weak in.</p><a class="lnk" href="#categories">See categories<i class="ar">→</i></a></div>
+    </div>
+    <div class="chart">
+      <div class="chart__h"><b>Flags captured by skill</b><span id="chart-total">0 flags captured</span></div>
+      <svg id="chart" role="img" aria-label="Cumulative flags captured per category over a 24 hour event"></svg>
+      <div class="slide"><button class="btn replay" id="replay" type="button">Replay</button><label for="hour" id="hour-out">Hour 0 of 24</label><input id="hour" type="range" min="0" max="240" step="1" value="0" aria-label="Event hour"></div>
+      <div class="legend" id="legend"></div>
+    </div>
+  </div>
+</section>
+
+<!-- SECURITY -->
+<section class="section" id="security">
+  <div class="wrap">
+    <div class="section-title"><h2>stuff your professor needs to see.</h2><p>No fancy animations here, just the facts. The platform is built to be attacked, and then fixed.</p></div>
+    <div class="sec">
+      <div><h3>Password hashing</h3><p>Passwords stored with bcrypt. Never plain text, never reversible.</p></div>
+      <div><h3>CSRF protection</h3><p>A token on every state-changing form, verified on the server.</p></div>
+      <div><h3>Rate limiting</h3><p>Login and flag submission are capped per user and per address.</p></div>
+      <div><h3>Role-based access</h3><p>Admin and player roles enforced on every route, not just hidden in the menu.</p></div>
+      <div><h3>Input validation</h3><p>Parameterized queries and escaped output stop injection and XSS.</p></div>
+      <div><h3>Audit trail</h3><p>Every sensitive action is recorded with who, what and when.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- START -->
+<section class="section">
+  <div class="wrap start">
+    <div>
+      <h2>start capturing.</h2>
+      <div class="start__l"><a class="btn btn--w btn--lg" href="register.html">Join event</a><a class="btn btn--lg" href="rules.html">Read the rules</a></div>
+    </div>
+    <div class="qs">
+      <a href="register.html">Create a player account <span>2 minutes</span></a>
+      <a href="login.html">Sign in <span>Players and admins</span></a>
+      <a href="rules.html">Rules and authorized targets <span>Read first</span></a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__g">
+      <div class="footer__a">
+        <a href="index.html" class="brand"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3v18"/><path d="M12 11l-6 6"/><path d="M12 11l6 6"/><path d="M8 3h8"/></svg>rootline</a>
+        <p>Secure CTF Hosting and Scoring Platform. A university ethical hacking project.</p>
+        <span class="status"><i></i>All systems operational</span>
+      </div>
+      <div><h4>Platform</h4><ul><li><a href="#platform">Challenge board</a></li><li><a href="#platform">Flag checking</a></li><li><a href="#platform">Dynamic scoring</a></li><li><a href="#platform">Audit log</a></li></ul></div>
+      <div><h4>Categories</h4><ul><li><a href="#categories">Web</a></li><li><a href="#categories">Crypto</a></li><li><a href="#categories">Forensics</a></li><li><a href="#categories">Reverse and pwn</a></li></ul></div>
+      <div><h4>Resources</h4><ul><li><a href="rules.html">Rules</a></li><li><a href="#security">Security</a></li><li><a href="#">Vulnerability log</a></li><li><a href="#">Test report</a></li></ul></div>
+      <div><h4>Project</h4><ul><li><a href="#">GitHub</a></li><li><a href="login.html">Sign in</a></li><li><a href="register.html">Register</a></li></ul></div>
+    </div>
+    <div class="footer__b"><span>&copy; 2026 Secure CTF Hosting and Scoring Platform. Authorized targets only.</span><ul><li><a href="rules.html">Rules</a></li><li><a href="#security">Security</a></li></ul></div>
+  </div>
+</footer>
+
+<script src="assets/js/main.js"></script>
+</body>
+</html>

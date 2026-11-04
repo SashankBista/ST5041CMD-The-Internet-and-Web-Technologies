@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rules | Rootline</title>
+<meta name="description" content="Host capture-the-flag events with hashed flags, rate-limited submissions, role-based access and a full audit trail.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<div class="banner">Spring CTF registration is open.<a href="register.html">Create your team</a></div>
+
+<header class="nav">
+  <div class="wrap nav__in">
+    <a href="index.html" class="brand">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3v18"/><path d="M12 11l-6 6"/><path d="M12 11l6 6"/><path d="M8 3h8"/></svg>
+      rootline
+    </a>
+    <ul class="menu">
+      <li><button class="caret">Platform</button>
+        <div class="drop">
+          <a href="#platform"><b>Challenge board</b><span>Categories, difficulty, hints and files</span></a>
+          <a href="#platform"><b>Flag checking</b><span>Hashed flags and rate limits</span></a>
+          <a href="#platform"><b>Dynamic scoring</b><span>Points that change with solves</span></a>
+          <a href="#platform"><b>Audit log</b><span>Every login, guess and admin change</span></a>
+        </div></li>
+      <li><button class="caret">Categories</button>
+        <div class="drop">
+          <a href="#categories"><b>Web exploitation</b><span>Injection, auth bypass, XSS</span></a>
+          <a href="#categories"><b>Cryptography</b><span>Ciphers, hashes, key misuse</span></a>
+          <a href="#categories"><b>Forensics</b><span>Disk, memory and packet analysis</span></a>
+          <a href="#categories"><b>Reverse and pwn</b><span>Binaries, memory and shellcode</span></a>
+        </div></li>
+      <li><a href="#security">Security</a></li>
+      <li><a href="rules.html">Rules</a></li>
+      <li class="menu__m"><a href="login.html">Sign in</a></li>
+    </ul>
+    <div class="nav__sp"></div>
+    <div class="nav__r">
+      <a class="btn hide-s" href="login.html">Sign in</a>
+      <a class="btn btn--w" href="register.html">Join event</a>
+      <button class="burger" aria-label="Menu">Menu</button>
+    </div>
+  </div>
+</header>
+
+<main>
+<div class="wrap">
+  <div class="head">
+    <h1 style="font-size:clamp(2.4rem,6vw,4.2rem)">the rules.</h1>
+    <p style="margin-top:18px;max-width:560px">Read these before you play. Joining an event means you agree to all of them.</p>
+  </div>
+  <div class="rules">
+    <nav class="toc" aria-label="Rules sections">
+      <a href="#scope" class="on">Authorized targets</a>
+      <a href="#teams">Teams and accounts</a>
+      <a href="#flags">Flags and submissions</a>
+      <a href="#scoring">Scoring</a>
+      <a href="#fair">Fair play</a>
+      <a href="#penalties">Penalties</a>
+      <a href="#privacy">Privacy and logging</a>
+    </nav>
+    <div>
+      <section class="rule" id="scope">
+        <h2>Authorized targets only</h2>
+        <div class="notice"><b>The most important rule</b><p>Attack only the challenge machines and applications listed on the challenge board. Everything else is off limits, including this platform, other players and any network you were not given.</p></div>
+        <ul>
+          <li><b>In scope</b><span>Challenge servers, files and services published by the organizers during the event window.</span></li>
+          <li><b>Out of scope</b><span>The Rootline platform itself, the event network, other teams and any third-party system.</span></li>
+          <li><b>Not sure?</b><span>Ask an organizer first. If it is not listed, treat it as out of scope.</span></li>
+        </ul>
+      </section>
+      <section class="rule" id="teams">
+        <h2>Teams and accounts</h2>
+        <ul>
+          <li><b>One account each</b><span>Every player registers one account. Duplicate or fake accounts are removed.</span></li>
+          <li><b>Team size</b><span>A team has between one and four members. Players can belong to one team only.</span></li>
+          <li><b>Passwords</b><span>Use a strong, unique password and never share it. You are responsible for your account.</span></li>
+          <li><b>Team names</b><span>No offensive, misleading or impersonating names. Organizers may rename a team.</span></li>
+        </ul>
+      </section>
+      <section class="rule" id="flags">
+        <h2>Flags and submissions</h2>
+        <ul>
+          <li><b>Format</b><span>Flags look like FLAG{...}. Submit the whole string including the braces.</span></li>
+          <li><b>Attempt limit</b><span>Each team can submit 10 flags per minute. Going over locks submissions for 60 seconds.</span></li>
+          <li><b>Sharing</b><span>Never share flags or solutions with other teams during the event, publicly or privately.</span></li>
+          <li><b>Broken challenge</b><span>If a challenge seems broken, tell an organizer. Do not exploit the fault.</span></li>
+        </ul>
+      </section>
+      <section class="rule" id="scoring">
+        <h2>Scoring</h2>
+        <p>Points go down as more teams solve a challenge, so earlier solves are worth more. A challenge never drops below its minimum value.</p>
+        <ul>
+          <li><b>First solve</b><span>The full base value of the challenge.</span></li>
+          <li><b>Later solves</b><span>The value falls with each solve down to the minimum.</span></li>
+          <li><b>Hints</b><span>Some hints cost points. The cost is shown before you unlock one.</span></li>
+          <li><b>Ties</b><span>Equal scores are ranked by whichever team reached the score first.</span></li>
+        </ul>
+      </section>
+      <section class="rule" id="fair">
+        <h2>Fair play</h2>
+        <ul>
+          <li><b>No brute force</b><span>Do not script flag guessing or hammer the login. The rate limit exists for this.</span></li>
+          <li><b>No denial of service</b><span>Do not flood, crash or overload challenge servers or the platform.</span></li>
+          <li><b>No collusion</b><span>Teams compete separately. Working together across teams is not allowed.</span></li>
+          <li><b>No outside help</b><span>Using tools and public references is fine. Asking someone else to solve it for you is not.</span></li>
+        </ul>
+      </section>
+      <section class="rule" id="penalties">
+        <h2>Penalties</h2>
+        <p>Penalties depend on how serious the breach is and are decided by the organizers.</p>
+        <div class="pen">
+          <div><b>Minor</b><span>Warning and removal of the affected points.</span></div>
+          <div><b>Serious</b><span>Points removed and a temporary suspension.</span></div>
+          <div><b>Severe</b><span>Disqualification and a ban from future events.</span></div>
+        </div>
+      </section>
+      <section class="rule" id="privacy">
+        <h2>Privacy and logging</h2>
+        <p>To keep the event fair and secure, Rootline records logins, submissions and administrative actions. Logs are used only to run the event, investigate rule breaks and report results. Passwords are stored as hashes and are never visible to organizers.</p>
+      </section>
+    </div>
+  </div>
+</div>
+<div style="height:30px"></div>
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__g">
+      <div class="footer__a">
+        <a href="index.html" class="brand"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3v18"/><path d="M12 11l-6 6"/><path d="M12 11l6 6"/><path d="M8 3h8"/></svg>rootline</a>
+        <p>Secure CTF Hosting and Scoring Platform. A university ethical hacking project.</p>
+        <span class="status"><i></i>All systems operational</span>
+      </div>
+      <div><h4>Platform</h4><ul><li><a href="#platform">Challenge board</a></li><li><a href="#platform">Flag checking</a></li><li><a href="#platform">Dynamic scoring</a></li><li><a href="#platform">Audit log</a></li></ul></div>
+      <div><h4>Categories</h4><ul><li><a href="#categories">Web</a></li><li><a href="#categories">Crypto</a></li><li><a href="#categories">Forensics</a></li><li><a href="#categories">Reverse and pwn</a></li></ul></div>
+      <div><h4>Resources</h4><ul><li><a href="rules.html">Rules</a></li><li><a href="#security">Security</a></li><li><a href="#">Vulnerability log</a></li><li><a href="#">Test report</a></li></ul></div>
+      <div><h4>Project</h4><ul><li><a href="#">GitHub</a></li><li><a href="login.html">Sign in</a></li><li><a href="register.html">Register</a></li></ul></div>
+    </div>
+    <div class="footer__b"><span>&copy; 2026 Secure CTF Hosting and Scoring Platform. Authorized targets only.</span><ul><li><a href="rules.html">Rules</a></li><li><a href="#security">Security</a></li></ul></div>
+  </div>
+</footer>
+
+<script src="assets/js/main.js"></script>
+<script>
+(function(){
+  var links=[].slice.call(document.querySelectorAll('.toc a')), secs=links.map(function(a){return document.querySelector(a.getAttribute('href'));});
+  if(!('IntersectionObserver' in window)) return;
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){var i=secs.indexOf(e.target);links.forEach(function(l,j){l.classList.toggle('on',i===j);});}});},{rootMargin:'-30% 0px -60% 0px'});
+  secs.forEach(function(s){io.observe(s);});
+})();
+</script>
+</body>
+</html>
