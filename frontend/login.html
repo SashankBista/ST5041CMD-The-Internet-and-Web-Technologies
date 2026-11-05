@@ -12,7 +12,7 @@
 </head>
 <body>
 
-<div class="banner">Spring CTF registration is open.<a href="register.html">Create your team</a></div>
+<div class="banner">Spring CTF registration is open.<a href="register.html">Register now</a></div>
 
 <header class="nav">
   <div class="wrap nav__in">
@@ -49,26 +49,16 @@
 </header>
 
 <main>
-<section class="signin">
-  <div class="wrap signin__g">
-    <div class="signin__info">
+<section class="auth">
+  <div class="wrap">
+    <div class="auth__head">
       <h1>welcome back.</h1>
       <p>Players and admins sign in here. You land on the right dashboard for your role.</p>
-      <div class="win">
-        <div class="win__bar"><i></i><i></i><i></i><span>session / checks</span></div>
-<pre class="code"><span class="c">$ rootline sign-in</span>
-password        <span class="s">hashed with bcrypt</span>
-session         <span class="s">expires after 30 min idle</span>
-attempts        <span class="s">5 per 15 min, then lockout</span>
-csrf token      <span class="s">required on every form</span></pre>
-      </div>
     </div>
 
     <form class="sform" id="signin" method="post" action="#" novalidate>
       <!-- Flask later: <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"> -->
       <input type="hidden" name="csrf_token" value="preview-token">
-      <h2>Sign in</h2>
-      <p class="sub">Use the account you registered with.</p>
       <div class="alert" id="si-alert" role="alert" hidden></div>
 
       <div class="f">
@@ -88,7 +78,6 @@ csrf token      <span class="s">required on every form</span></pre>
 
       <button class="btn btn--w btn--lg btn--block" type="submit">Sign in</button>
       <p class="alt">New to Rootline? <a class="lnk" href="register.html">Create an account</a></p>
-      <p class="note">Only sign in on events you are authorized to play.</p>
     </form>
   </div>
 </section>
