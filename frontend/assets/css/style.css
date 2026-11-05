@@ -657,3 +657,64 @@ button.tag.on { background: var(--text); color: var(--bg); border-color: var(--t
 
 .menu > li.menu__m { display: none; }
 @media (max-width: 820px) { .menu > li.menu__m { display: block; } }
+
+
+/* ---------- v7: centered auth pages ---------- */
+.auth { padding-block: 72px 96px; }
+.auth__head { text-align: center; margin-bottom: 38px; }
+.auth__head h1 { font-size: clamp(2.6rem, 6vw, 4.4rem); }
+.auth__head p { margin: 18px auto 0; max-width: 460px; font-size: 1.08rem; }
+.sform { width: min(460px, 100%); margin-inline: auto; padding: 34px 32px 30px; }
+.sform--wide { width: min(680px, 100%); }
+.f2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 20px; }
+.hint { margin: 7px 0 0; font-size: .8rem; color: var(--mute); }
+@media (max-width: 700px) {
+  .auth { padding-block: 44px 64px; }
+  .auth__head { margin-bottom: 28px; }
+  .f2 { grid-template-columns: minmax(0, 1fr); }
+  .sform, .sform--wide { padding: 26px 20px 24px; }
+}
+
+/* password strength meter */
+.meter { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin-top: 10px; }
+.meter i { height: 3px; background: var(--line-hi); transition: background .2s; }
+.meter[data-s="1"] i:nth-child(-n+1) { background: var(--red); }
+.meter[data-s="2"] i:nth-child(-n+2) { background: var(--amber); }
+.meter[data-s="3"] i:nth-child(-n+3) { background: var(--green); }
+.meter[data-s="4"] i { background: var(--green); }
+
+/* solo / team choice */
+.how { border: 0; padding: 0; margin: 4px 0 22px; min-width: 0; }
+.how legend { font-size: .88rem; color: var(--dim); padding: 0; margin-bottom: 10px; }
+.choice { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 18px; }
+.opt { position: relative; display: block; border: 1px solid var(--line-hi); background: var(--bg); padding: 16px 16px 16px 46px; cursor: pointer; transition: border-color .15s, background .15s; }
+.opt:hover { border-color: var(--mute); }
+.opt.on { border-color: var(--text); background: var(--bg-3); }
+.opt input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+.opt__dot { position: absolute; left: 16px; top: 19px; width: 15px; height: 15px; border: 1px solid var(--mute); border-radius: 50%; transition: border-color .15s; }
+.opt.on .opt__dot { border-color: var(--text); }
+.opt.on .opt__dot::after { content: ""; position: absolute; inset: 3px; border-radius: 50%; background: var(--text); }
+.opt input:focus-visible ~ .opt__dot { outline: 1px solid var(--text); outline-offset: 3px; }
+.opt__t b { display: block; font-weight: 500; color: var(--text); margin-bottom: 3px; }
+.opt__t span { display: block; font-size: .85rem; color: var(--dim); line-height: 1.45; }
+#team-fields[hidden] { display: none; }
+#team-fields { animation: reveal .25s ease; }
+@keyframes reveal { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+@media (max-width: 700px) { .choice { grid-template-columns: minmax(0, 1fr); } }
+.hint.ok { color: var(--green-t); }
+
+/* checkbox */
+.chk { display: flex; gap: 12px; align-items: flex-start; cursor: pointer; font-size: .92rem; color: var(--dim); line-height: 1.5; margin: 0; }
+.chk input { position: absolute; opacity: 0; width: 18px; height: 18px; margin: 0; cursor: pointer; }
+.chk__box { flex: none; width: 18px; height: 18px; margin-top: 2px; border: 1px solid var(--mute); background: var(--bg); position: relative; transition: border-color .15s, background .15s; }
+.chk:hover .chk__box { border-color: var(--text); }
+.chk input:checked ~ .chk__box { background: var(--text); border-color: var(--text); }
+.chk input:checked ~ .chk__box::after { content: ""; position: absolute; left: 5px; top: 1px; width: 5px; height: 10px; border: solid var(--bg); border-width: 0 2px 2px 0; transform: rotate(45deg); }
+.chk input:focus-visible ~ .chk__box { outline: 1px solid var(--text); outline-offset: 3px; }
+.chk input.bad ~ .chk__box { border-color: var(--red); }
+.chk .lnk { color: var(--text); }
+
+/* checkbox inside .f: beat the generic ".f label" rule */
+.f label.chk { display: flex; margin: 0; font-size: .92rem; color: var(--dim); }
+.f label.chk input { position: absolute; opacity: 0; }
+.f input.bad, .f input.bad:focus, .f input.bad:hover { border-color: var(--red); }

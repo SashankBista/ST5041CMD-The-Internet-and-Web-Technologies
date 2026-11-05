@@ -221,6 +221,92 @@
     });
   }
 
+  // ---------- register form (front-end validation only) ----------
+  var reg = document.getElementById('register');
+  if (reg) {
+    var $ = function (id) { return document.getElementById(id); };
+    var teams = { 'nullbyte': [3, 4], 'r00tkit': [4, 4], 'stackoverflown': [2, 4], 'segfault': [1, 4], '0xdeadbeef': [3, 4], 'packet_loss': [4, 4] };
+    var F = { user: $('rg-user'), email: $('rg-email'), pw: $('rg-pw'), pw2: $('rg-pw2'), team: $('rg-team'), code: $('rg-code'), terms: $('rg-terms') };
+    var rAlert = $('rg-alert'), meter = $('rg-meter'), meterT = $('rg-meter-t'), teamBox = $('team-fields'), teamInfo = $('rg-team-i');
+    var TEAM_HINT = 'Start typing to search existing teams.';
+    function err(input, msg) {
+      var e = $(input.id + '-e'); input.classList.toggle('bad', !!msg); input.setAttribute('aria-invalid', msg ? 'true' : 'false');
+      e.hidden = !msg; e.textContent = msg || '';
+    }
+    function mode() { return reg.querySelector('input[name=mode]:checked').value; }
+
+    // solo / team choice
+    reg.querySelectorAll('.opt input').forEach(function (r) {
+      r.addEventListener('change', function () {
+        reg.querySelectorAll('.opt').forEach(function (o) { o.classList.toggle('on', o.querySelector('input').checked); });
+        var team = mode() === 'team'; teamBox.hidden = !team;
+        if (!team) { err(F.team, ''); err(F.code, ''); }
+        else F.team.focus();
+        rAlert.hidden = true;
+      });
+    });
+
+    // password show/hide (controls both password fields)
+    reg.querySelector('.pw__t').addEventListener('click', function () {
+      var btn = this, show = F.pw.type === 'password';
+      [F.pw, F.pw2].forEach(function (i) { i.type = show ? 'text' : 'password'; });
+      btn.textContent = show ? 'Hide' : 'Show'; btn.setAttribute('aria-pressed', show); btn.setAttribute('aria-label', show ? 'Hide passwords' : 'Show passwords');
+    });
+
+    // password strength
+    function score(p) {
+      var s = 0; if (p.length >= 8) s++; if (p.length >= 12) s++;
+      if (/[a-z]/.test(p) && /[A-Z]/.test(p)) s++; if (/\d/.test(p) && /[^A-Za-z0-9]/.test(p)) s++;
+      return p.length < 8 ? Math.min(s, 1) : s;
+    }
+    F.pw.addEventListener('input', function () {
+      var p = F.pw.value, s = p ? Math.max(1, score(p)) : 0;
+      meter.setAttribute('data-s', s);
+      meterT.textContent = !p ? 'At least 8 characters. 12 or more is better.' : ['', 'Weak. Add more characters.', 'Okay. Longer is better.', 'Good.', 'Strong.'][s];
+    });
+
+    // team lookup
+    F.team.addEventListener('input', function () {
+      err(F.team, ''); teamInfo.className = 'hint';
+      var t = teams[F.team.value.trim().toLowerCase()];
+      if (!F.team.value.trim()) teamInfo.textContent = TEAM_HINT;
+      else if (t && t[0] >= t[1]) { teamInfo.textContent = 'This team is full (' + t[0] + ' of ' + t[1] + ').'; }
+      else if (t) { teamInfo.textContent = 'Team found: ' + t[0] + ' of ' + t[1] + ' members.'; teamInfo.className = 'hint ok'; }
+      else teamInfo.textContent = TEAM_HINT;
+    });
+
+    Object.keys(F).forEach(function (k) {
+      var ev = k === 'terms' ? 'change' : 'input';
+      F[k].addEventListener(ev, function () { err(F[k], ''); rAlert.hidden = true; });
+    });
+
+    reg.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var bad = [], u = F.user.value.trim(), em = F.email.value.trim(), p = F.pw.value;
+      function fail(input, msg) { err(input, msg); bad.push(input); }
+      if (!/^[A-Za-z0-9_-]{3,24}$/.test(u)) fail(F.user, 'Use 3 to 24 letters, numbers, _ or -.'); else err(F.user, '');
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) fail(F.email, 'Enter a valid email address.'); else err(F.email, '');
+      if (p.length < 8) fail(F.pw, 'Password must be at least 8 characters.'); else err(F.pw, '');
+      if (F.pw2.value !== p || !F.pw2.value) fail(F.pw2, 'Passwords do not match.'); else err(F.pw2, '');
+      var m = mode(), teamName = F.team.value.trim();
+      if (m === 'team') {
+        var t = teams[teamName.toLowerCase()];
+        if (!teamName) fail(F.team, 'Enter the name of the team you want to join.');
+        else if (!t) fail(F.team, 'No team found with that name.');
+        else if (t[0] >= t[1]) fail(F.team, 'That team is full. Choose another team or play solo.');
+        else err(F.team, '');
+        if (!/^[A-Za-z0-9-]{6,24}$/.test(F.code.value.trim())) fail(F.code, 'Enter the invite code (6 to 24 characters).'); else err(F.code, '');
+      }
+      if (!F.terms.checked) fail(F.terms, 'You need to agree to the rules to join.'); else err(F.terms, '');
+      if (bad.length) {
+        rAlert.className = 'alert'; rAlert.textContent = 'Check the highlighted fields and try again.'; rAlert.hidden = false; bad[0].focus(); return;
+      }
+      rAlert.className = 'alert info';
+      rAlert.textContent = 'Preview only: this connects to the server once the backend is added. You would ' + (m === 'solo' ? 'register as a solo player.' : 'register and request to join ' + teamName + '.');
+      rAlert.hidden = false;
+    });
+  }
+
   // ---------- skills chart ----------
   var svg = document.getElementById('chart');
   if (!svg) return;
