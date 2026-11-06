@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dashboard | Rootline</title>
+<meta name="description" content="Host capture-the-flag events with hashed flags, rate-limited submissions, role-based access and a full audit trail.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap nav__in">
+    <a href="index.html" class="brand">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3v18"/><path d="M12 11l-6 6"/><path d="M12 11l6 6"/><path d="M8 3h8"/></svg>
+      rootline
+    </a>
+    <ul class="menu">
+      <li><a href="dashboard.html" class="on">Dashboard</a></li>
+      <li><a href="challenges.html">Challenges</a></li>
+      <li><a href="scoreboard.html">Scoreboard</a></li>
+      <li><a href="rules.html">Rules</a></li>
+    </ul>
+    <div class="nav__sp"></div>
+    <div class="nav__r">
+      <details class="who"><summary>NB</summary><div><span class="who__n">nullbyte · player</span><a href="dashboard.html">Dashboard</a><a href="challenges.html">Challenges</a><a href="index.html">Sign out</a></div></details>
+      <button class="burger" aria-label="Menu">Menu</button>
+    </div>
+  </div>
+</header>
+
+<main>
+<div class="wrap dash">
+  <div class="dash__head">
+    <div>
+      <h1>hello, nullbyte.</h1>
+      <p>Team nullbyte · rank 3 of 48</p>
+    </div>
+    <div class="row2">
+      <span class="cd">Event ends in<b id="countdown" data-sec="7749">02:09:09</b></span>
+      <a class="btn btn--w" href="challenges.html">Continue playing</a>
+    </div>
+  </div>
+
+  <div class="kpis">
+    <div class="kpi"><div class="kpi__l">Score</div><div class="kpi__n">5,700</div><div class="kpi__d up">+300 since 13:41</div></div>
+    <div class="kpi"><div class="kpi__l">Rank</div><div class="kpi__n">#3</div><div class="kpi__d">250 points behind #2</div></div>
+    <div class="kpi"><div class="kpi__l">Solves</div><div class="kpi__n">11</div><div class="kpi__d">of 24 challenges</div></div>
+    <div class="kpi"><div class="kpi__l">Hints used</div><div class="kpi__n">2</div><div class="kpi__d">-60 points</div></div>
+  </div>
+
+  <div class="dgrid">
+    <div>
+      <section class="pn">
+        <div class="pn__h"><h2>Progress by skill</h2><a href="challenges.html">All challenges</a></div>
+        <div class="pn__b"><div class="pg"><span>Web</span><div class="pg__t"><i style="--w:67%"></i></div><span class="pg__n">4/6</span></div><div class="pg"><span>Crypto</span><div class="pg__t"><i style="--w:60%"></i></div><span class="pg__n">3/5</span></div><div class="pg"><span>Forensics</span><div class="pg__t"><i style="--w:50%"></i></div><span class="pg__n">2/4</span></div><div class="pg"><span>Reverse</span><div class="pg__t"><i style="--w:25%"></i></div><span class="pg__n">1/4</span></div><div class="pg"><span>Pwn</span><div class="pg__t"><i style="--w:20%"></i></div><span class="pg__n">1/5</span></div></div>
+      </section>
+
+      <section class="pn">
+        <div class="pn__h"><h2>Recent solves</h2><a href="challenges.html">View all</a></div>
+        <div class="tbl"><table>
+          <thead><tr><th>Time</th><th>Challenge</th><th>Category</th><th class="n">Points</th></tr></thead>
+          <tbody>
+            <tr><td class="mono">13:41</td><td>Cookie monster</td><td>web</td><td class="n">+150</td></tr>
+            <tr><td class="mono">13:20</td><td>Login bypass</td><td>web</td><td class="n">+300</td></tr>
+            <tr><td class="mono">12:58</td><td>Caesar's second try</td><td>crypto</td><td class="n">+100</td></tr>
+            <tr><td class="mono">12:31</td><td>Ghost in the pcap</td><td>forensics</td><td class="n">+250</td></tr>
+            <tr><td class="mono">12:02</td><td>Hidden layers</td><td>forensics</td><td class="n">+200</td></tr>
+          </tbody></table></div>
+      </section>
+
+      <section class="pn">
+        <div class="pn__h"><h2>Open challenges</h2><a href="challenges.html">Browse board</a></div>
+        <a class="li" href="challenges.html"><div class="li__t"><b>Weak RSA</b><span>crypto · medium</span></div><span class="li__r">300 pts</span></a>
+        <a class="li" href="challenges.html"><div class="li__t"><b>Stack smash 101</b><span>pwn · hard</span></div><span class="li__r">500 pts</span></a>
+        <a class="li" href="challenges.html"><div class="li__t"><b>Crackme.exe</b><span>reverse · hard</span></div><span class="li__r">450 pts</span></a>
+      </section>
+    </div>
+
+    <div>
+      <section class="pn">
+        <div class="pn__h"><h2>Announcements</h2></div>
+        <div class="ann"><time>13:55</time><b>Heap of trouble goes live at 18:00</b><p>A new pwn challenge worth 600 points opens this evening.</p></div>
+        <div class="ann"><time>12:10</time><b>Hint added to Weak RSA</b><p>Check the key size before you reach for a factoring tool.</p></div>
+        <div class="ann"><time>09:00</time><b>Event started</b><p>Good luck. Remember: authorized targets only.</p></div>
+      </section>
+
+      <section class="pn">
+        <div class="pn__h"><h2>Your team</h2><span class="st st--ok">3 of 4</span></div>
+        <div class="mem"><span>nullbyte</span><i>you · captain</i></div>
+        <div class="mem"><span>kernel_panic</span><i>member</i></div>
+        <div class="mem"><span>root_cause</span><i>member</i></div>
+        <div class="code-line"><span>Invite code &nbsp; 7K3F-92QX</span><button type="button" data-copy="7K3F-92QX">Copy</button></div>
+      </section>
+    </div>
+  </div>
+</div>
+</main>
+<footer class="footer footer--slim"><div class="wrap footer__b"><span>&copy; 2026 Rootline. Authorized targets only.</span><ul><li><a href="rules.html">Rules</a></li><li><a href="index.html">Sign out</a></li></ul></div></footer>
+<script src="assets/js/main.js"></script>
+</body>
+</html>
