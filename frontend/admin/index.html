@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin overview | Rootline</title>
+<meta name="description" content="Host capture-the-flag events: challenges, teams, flag checking and live scoring in one place.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+
+<header class="nav" id="nav">
+  <div class="wrap nav__in">
+    <a href="../index.html" class="brand">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3v18"/><path d="M12 11l-6 6"/><path d="M12 11l6 6"/><path d="M8 3h8"/></svg>
+      rootline
+    </a>
+    <ul class="menu">
+      <li><a href="../admin/index.html" class="on">Admin</a></li>
+      <li><a href="../challenges.html">Challenges</a></li>
+      <li><a href="../scoreboard.html">Scoreboard</a></li>
+      <li><a href="../rules.html">Rules</a></li>
+    </ul>
+    <div class="nav__sp"></div>
+    <div class="nav__r">
+      <details class="who"><summary>AD</summary><div><span class="who__n">admin · admin</span><a href="../admin/index.html">Dashboard</a><a href="../challenges.html">Challenges</a><a href="../index.html">Sign out</a></div></details>
+      <button class="burger" aria-label="Menu">Menu</button>
+    </div>
+  </div>
+</header>
+
+<main>
+<div class="wrap adm">
+  <nav class="asb" aria-label="Admin sections"><p>MANAGE</p><a href="../admin/index.html" class="on">Overview</a><a href="../admin/challenges.html">Challenges<em>36</em></a><a href="../admin/users.html">Users<em>214</em></a><a href="../admin/teams.html">Teams<em>48</em></a><a href="../admin/submissions.html">Submissions<em>1.3k</em></a><a href="../admin/announcements.html">Announcements<em>6</em></a><a href="../admin/logs.html">Activity log</a></nav>
+  <div class="adm__main">
+    <div class="dash__head">
+      <div><h1>Admin overview</h1><p>Spring CTF · event live</p></div>
+      <div class="row2"><a class="btn" href="../admin/announcements.html">New announcement</a><a class="btn btn--w" href="../admin/challenges.html">New challenge</a></div>
+    </div>
+    <div class="kpis">
+      <div class="kpi"><div class="kpi__l">Users</div><div class="kpi__n">214</div><div class="kpi__d up">+12 today</div></div>
+      <div class="kpi"><div class="kpi__l">Teams</div><div class="kpi__n">48</div><div class="kpi__d">6 solo players</div></div>
+      <div class="kpi"><div class="kpi__l">Challenges</div><div class="kpi__n">36</div><div class="kpi__d">31 live · 5 hidden</div></div>
+      <div class="kpi"><div class="kpi__l">Submissions</div><div class="kpi__n">1,284</div><div class="kpi__d">last hour: 96</div></div>
+      <div class="kpi"><div class="kpi__l">Solve rate</div><div class="kpi__n">41%</div><div class="kpi__d down">-3% vs yesterday</div></div>
+    </div>
+    <div class="dgrid">
+      <div>
+        <section class="pn">
+          <div class="pn__h"><h2>Submissions per hour</h2><span class="lg"><span><i style="background:#3dd68c"></i>Correct</span><span><i style="background:#ff6369"></i>Wrong</span></span></div>
+          <div class="pn__b"><div id="adm-chart"></div></div>
+        </section>
+        <section class="pn">
+          <div class="pn__h"><h2>Recent activity</h2><a href="../admin/logs.html">Open activity log</a></div>
+          <div class="tbl"><table>
+            <thead><tr><th>Time</th><th>Actor</th><th>Action</th><th>Result</th></tr></thead>
+            <tbody>
+              <tr><td class="mono">14:02:11</td><td>nullbyte</td><td>Flag submit #14</td><td><span class="st st--ok">correct</span></td></tr>
+              <tr><td class="mono">14:01:48</td><td>r00tkit</td><td>Flag submit #09</td><td><span class="st st--bad">wrong</span></td></tr>
+              <tr><td class="mono">14:01:12</td><td>stackoverflown</td><td>Login</td><td><span class="st st--ok">success</span></td></tr>
+              <tr><td class="mono">13:58:40</td><td>admin</td><td>Edited challenge #22</td><td><span class="st">logged</span></td></tr>
+              <tr><td class="mono">13:55:03</td><td>admin</td><td>Created challenge #37</td><td><span class="st">logged</span></td></tr>
+            </tbody></table></div>
+        </section>
+      </div>
+      <div>
+        <section class="pn attn">
+          <div class="pn__h"><h2>Needs attention</h2><span class="st st--warn">3</span></div>
+          <div class="li"><div class="li__t"><b>Heap of trouble</b><span>Scheduled for 18:00, no flag set</span></div><a class="btn btn--sm" href="../admin/challenges.html">Fix</a></div>
+          <div class="li"><div class="li__t"><b>3 challenges have no hints</b><span>Players are asking in announcements</span></div><a class="btn btn--sm" href="../admin/challenges.html">Review</a></div>
+          <div class="li"><div class="li__t"><b>6 solo players</b><span>Not on a team yet</span></div><a class="btn btn--sm" href="../admin/teams.html">View</a></div>
+        </section>
+        <section class="pn">
+          <div class="pn__h"><h2>Hardest challenges</h2><a href="../admin/challenges.html">All</a></div>
+          <div class="li"><div class="li__t"><b>Stack smash 101</b><span>pwn · 500 pts</span></div><span class="li__r">3 solves</span></div>
+          <div class="li"><div class="li__t"><b>Crackme.exe</b><span>reverse · 450 pts</span></div><span class="li__r">5 solves</span></div>
+          <div class="li"><div class="li__t"><b>Weak RSA</b><span>crypto · 300 pts</span></div><span class="li__r">9 solves</span></div>
+        </section>
+        <section class="pn">
+          <div class="pn__h"><h2>Roles</h2></div>
+          <div class="li"><div class="li__t"><b>Players</b></div><span class="li__r">209</span></div>
+          <div class="li"><div class="li__t"><b>Admins</b></div><span class="li__r">5</span></div>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>
+</main>
+<footer class="footer footer--slim"><div class="wrap footer__b"><span>&copy; 2026 Rootline. Authorized targets only.</span><ul><li><a href="../rules.html">Rules</a></li><li><a href="../index.html">Sign out</a></li></ul></div></footer>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>
