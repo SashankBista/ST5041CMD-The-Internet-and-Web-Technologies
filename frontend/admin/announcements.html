@@ -35,7 +35,21 @@
 <main>
 <div class="wrap adm">
   <nav class="asb" aria-label="Admin sections"><p>MANAGE</p><a href="../admin/index.html">Overview</a><a href="../admin/challenges.html">Challenges<em>36</em></a><a href="../admin/users.html">Users<em>214</em></a><a href="../admin/teams.html">Teams<em>48</em></a><a href="../admin/submissions.html">Submissions<em>1.3k</em></a><a href="../admin/announcements.html" class="on">Announcements<em>6</em></a><a href="../admin/logs.html">Activity log</a></nav>
-  <div class="adm__main"><div class="dash__head"><div><h1>Announcements</h1><p>This page is built in the next step.</p></div></div></div>
+  <div class="adm__main">
+<div class="dash__head"><div><h1>Announcements</h1><p>Posts show on every player's dashboard.</p></div></div>
+    <div class="annl">
+      <section class="pn" id="ann-list"><div class="pn__h"><h2>Posted</h2><span class="st">6</span></div><div class="arow" data-pin=""><div class="arow__h"><time>Today 13:55</time><span class="st st--warn" hidden>pinned</span></div><b>Heap of trouble goes live at 18:00</b><p>A new pwn challenge worth 600 points opens this evening.</p><div class="act"><button type="button" class="btn btn--sm" data-edit>Edit</button><button type="button" class="btn btn--sm btn--del" data-del>Delete</button></div></div><div class="arow" data-pin=""><div class="arow__h"><time>Today 12:10</time><span class="st st--warn" hidden>pinned</span></div><b>Hint added to Weak RSA</b><p>Check the key size before you reach for a factoring tool.</p><div class="act"><button type="button" class="btn btn--sm" data-edit>Edit</button><button type="button" class="btn btn--sm btn--del" data-del>Delete</button></div></div><div class="arow" data-pin=""><div class="arow__h"><time>Today 09:00</time><span class="st st--warn" hidden>pinned</span></div><b>Event started</b><p>Good luck. Remember: authorized targets only.</p><div class="act"><button type="button" class="btn btn--sm" data-edit>Edit</button><button type="button" class="btn btn--sm btn--del" data-del>Delete</button></div></div><div class="arow" data-pin="1"><div class="arow__h"><time>Mar 14</time><span class="st st--warn">pinned</span></div><b>Event schedule</b><p>The event runs from 09:00 to 16:15. Scores are final at the end.</p><div class="act"><button type="button" class="btn btn--sm" data-edit>Edit</button><button type="button" class="btn btn--sm btn--del" data-del>Delete</button></div></div><div class="arow" data-pin=""><div class="arow__h"><time>Mar 12</time><span class="st st--warn" hidden>pinned</span></div><b>Practice challenges are live</b><p>Try the easy challenges now to learn how the board works.</p><div class="act"><button type="button" class="btn btn--sm" data-edit>Edit</button><button type="button" class="btn btn--sm btn--del" data-del>Delete</button></div></div><div class="arow" data-pin=""><div class="arow__h"><time>Mar 10</time><span class="st st--warn" hidden>pinned</span></div><b>Registration is open</b><p>Sign up on your own or with a team. Teams have up to four players.</p><div class="act"><button type="button" class="btn btn--sm" data-edit>Edit</button><button type="button" class="btn btn--sm btn--del" data-del>Delete</button></div></div></section>
+      <section class="pn">
+        <div class="pn__h"><h2 id="ann-h">New announcement</h2></div>
+        <form class="pn__b" id="ann-form" novalidate>
+          <div class="f"><label for="ann-title">Title</label><input id="ann-title" type="text" maxlength="80"><p class="err" id="ann-title-e" hidden></p></div>
+          <div class="f"><label for="ann-body">Message</label><textarea id="ann-body"></textarea><p class="err" id="ann-body-e" hidden></p></div>
+          <div class="f"><label class="chk"><input type="checkbox" id="ann-pin"><span class="chk__box"></span><span>Pin to the top of the dashboard</span></label></div>
+          <div class="formbar"><button type="button" class="btn" id="ann-cancel" hidden>Cancel</button><button type="submit" class="btn btn--w" id="ann-save">Post announcement</button></div>
+        </form>
+      </section>
+    </div>
+  </div>
 </div>
 </main>
 <footer class="footer footer--slim"><div class="wrap footer__b"><span>&copy; 2026 Rootline. Authorized targets only.</span><ul><li><a href="../rules.html">Rules</a></li><li><a href="../index.html">Sign out</a></li></ul></div></footer>
