@@ -34,24 +34,36 @@
 
 <main>
 <div class="wrap adm">
-  <nav class="asb" aria-label="Admin sections"><p>MANAGE</p><a href="../admin/index.html" class="on">Overview</a><a href="../admin/challenges.html">Challenges<em>36</em></a><a href="../admin/users.html">Users<em>214</em></a><a href="../admin/teams.html">Teams<em>48</em></a><a href="../admin/submissions.html">Submissions<em>1.3k</em></a><a href="../admin/announcements.html">Announcements<em>6</em></a><a href="../admin/logs.html">Activity log</a></nav>
+  <nav class="asb" aria-label="Admin sections">
+    <p>OVERVIEW</p>
+    <a href="../admin/index.html" class="on">Overview</a>
+    <p>CONTENT</p>
+    <a href="../admin/challenges.html">Challenges<em>26</em></a>
+    <a href="../admin/announcements.html">Announcements<em>6</em></a>
+    <p>PEOPLE</p>
+    <a href="../admin/users.html">Users<em>136</em></a>
+    <a href="../admin/teams.html">Teams<em>48</em></a>
+    <p>DATA</p>
+    <a href="../admin/submissions.html">Submissions<em>1.3k</em></a>
+    <a href="../admin/logs.html">Activity log</a>
+  </nav>
   <div class="adm__main">
     <div class="dash__head">
       <div><h1>Admin overview</h1><p>Spring CTF · event live</p></div>
       <div class="row2"><a class="btn" href="../admin/announcements.html">New announcement</a><a class="btn btn--w" href="../admin/challenges.html">New challenge</a></div>
     </div>
     <div class="kpis">
-      <div class="kpi"><div class="kpi__l">Users</div><div class="kpi__n">214</div><div class="kpi__d up">+12 today</div></div>
+      <div class="kpi"><div class="kpi__l">Users</div><div class="kpi__n">136</div><div class="kpi__d up">+12 today</div></div>
       <div class="kpi"><div class="kpi__l">Teams</div><div class="kpi__n">48</div><div class="kpi__d">6 solo players</div></div>
-      <div class="kpi"><div class="kpi__l">Challenges</div><div class="kpi__n">36</div><div class="kpi__d">31 live · 5 hidden</div></div>
-      <div class="kpi"><div class="kpi__l">Submissions</div><div class="kpi__n">1,284</div><div class="kpi__d">last hour: 96</div></div>
-      <div class="kpi"><div class="kpi__l">Solve rate</div><div class="kpi__n">41%</div><div class="kpi__d down">-3% vs yesterday</div></div>
+      <div class="kpi"><div class="kpi__l">Challenges</div><div class="kpi__n">26</div><div class="kpi__d">24 live · 2 not live</div></div>
+      <div class="kpi"><div class="kpi__l">Submissions</div><div class="kpi__n">1,284</div><div class="kpi__d">192 in the last hour</div></div>
+      <div class="kpi"><div class="kpi__l">Solve rate</div><div class="kpi__n">41%</div><div class="kpi__d">526 of 1,284 correct</div></div>
     </div>
     <div class="dgrid">
       <div>
         <section class="pn">
-          <div class="pn__h"><h2>Submissions per hour</h2><span class="lg"><span><i style="background:#3dd68c"></i>Correct</span><span><i style="background:#ff6369"></i>Wrong</span></span></div>
-          <div class="pn__b"><div id="adm-chart"></div></div>
+          <div class="pn__h"><h2>Submissions since the event started</h2><span class="lg"><span><i style="background:#3dd68c"></i>Correct</span><span><i style="background:#ff6369"></i>Wrong</span></span></div>
+          <div class="pn__b"><div id="adm-chart" data-correct="33,32,35,30,31,28,23,23,18,18,17,18,21,24,24,26,28,29,25,22,21" data-wrong="70,67,59,59,51,45,39,30,27,22,21,23,24,27,33,34,32,28,27,23,17" data-start="09:00" data-step="15"><p class="mute chart-fallback">Loading chart...</p></div></div>
         </section>
         <section class="pn">
           <div class="pn__h"><h2>Recent activity</h2><a href="../admin/logs.html">Open activity log</a></div>
@@ -71,7 +83,7 @@
           <div class="pn__h"><h2>Needs attention</h2><span class="st st--warn">3</span></div>
           <div class="li"><div class="li__t"><b>Heap of trouble</b><span>Scheduled for 18:00, no flag set</span></div><a class="btn btn--sm" href="../admin/challenges.html">Fix</a></div>
           <div class="li"><div class="li__t"><b>3 challenges have no hints</b><span>Players are asking in announcements</span></div><a class="btn btn--sm" href="../admin/challenges.html">Review</a></div>
-          <div class="li"><div class="li__t"><b>6 solo players</b><span>Not on a team yet</span></div><a class="btn btn--sm" href="../admin/teams.html">View</a></div>
+          <div class="li"><div class="li__t"><b>6 solo players</b><span>Playing alone, can still join a team</span></div><a class="btn btn--sm" href="../admin/teams.html">View</a></div>
         </section>
         <section class="pn">
           <div class="pn__h"><h2>Hardest challenges</h2><a href="../admin/challenges.html">All</a></div>
@@ -81,7 +93,7 @@
         </section>
         <section class="pn">
           <div class="pn__h"><h2>Roles</h2></div>
-          <div class="li"><div class="li__t"><b>Players</b></div><span class="li__r">209</span></div>
+          <div class="li"><div class="li__t"><b>Players</b></div><span class="li__r">131</span></div>
           <div class="li"><div class="li__t"><b>Admins</b></div><span class="li__r">5</span></div>
         </section>
       </div>

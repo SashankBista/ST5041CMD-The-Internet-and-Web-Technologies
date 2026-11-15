@@ -65,8 +65,8 @@
     var rows = [
       '<span class="c">$ submit sql-login-bypass</span>',
       'format check    <span class="s">ok</span>',
-      'rate limit      <span class="s">3 of 10 this minute</span>',
-      'hash compare    <span class="s">match</span>',
+      'flag check      <span class="s">correct</span>',
+      'team            nullbyte',
       '<span class="s">Solved</span>  <span class="n">+300</span> points awarded'
     ];
     outEl.innerHTML = '<span class="c">waiting for a submission...</span>';
@@ -214,10 +214,12 @@
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       var a = idIn.value.trim(), p = pwIn.value, bad = false;
-      if (a.length < 3) { fieldErr(idIn, idErr, 'Enter your email or username.'); bad = true; } else fieldErr(idIn, idErr, '');
-      if (p.length < 8) { fieldErr(pwIn, pwErr, 'Password must be at least 8 characters.'); bad = true; } else fieldErr(pwIn, pwErr, '');
-      if (bad) { alertEl.className = 'alert'; alertEl.textContent = 'Check the highlighted fields and try again.'; alertEl.hidden = false; (a.length < 3 ? idIn : pwIn).focus(); return; }
-      alertEl.className = 'alert info'; alertEl.textContent = 'Preview only: this form is connected to the server once the backend is added.'; alertEl.hidden = false;
+      if (!a) { fieldErr(idIn, idErr, 'Enter your email or username.'); bad = true; } else fieldErr(idIn, idErr, '');
+      if (!p) { fieldErr(pwIn, pwErr, 'Enter your password.'); bad = true; } else fieldErr(pwIn, pwErr, '');
+      if (bad) { alertEl.className = 'alert'; alertEl.textContent = 'Check the highlighted fields and try again.'; alertEl.hidden = false; (!a ? idIn : pwIn).focus(); return; }
+      var isAdmin = a.toLowerCase() === 'admin';
+      alertEl.className = 'alert info'; alertEl.textContent = 'Signed in (preview). Taking you to the ' + (isAdmin ? 'admin' : 'player') + ' dashboard...'; alertEl.hidden = false;
+      setTimeout(function () { location.href = isAdmin ? 'admin/index.html' : 'dashboard.html'; }, 900);
     });
   }
 
@@ -227,7 +229,7 @@
     var $ = function (id) { return document.getElementById(id); };
     var teams = { 'nullbyte': [3, 4], 'r00tkit': [4, 4], 'stackoverflown': [2, 4], 'segfault': [1, 4], '0xdeadbeef': [3, 4], 'packet_loss': [4, 4] };
     var F = { user: $('rg-user'), email: $('rg-email'), pw: $('rg-pw'), pw2: $('rg-pw2'), team: $('rg-team'), code: $('rg-code'), terms: $('rg-terms') };
-    var rAlert = $('rg-alert'), meter = $('rg-meter'), meterT = $('rg-meter-t'), teamBox = $('team-fields'), teamInfo = $('rg-team-i');
+    var rAlert = $('rg-alert'), teamBox = $('team-fields'), teamInfo = $('rg-team-i');
     var TEAM_HINT = 'Start typing to search existing teams.';
     function err(input, msg) {
       var e = $(input.id + '-e'); input.classList.toggle('bad', !!msg); input.setAttribute('aria-invalid', msg ? 'true' : 'false');
@@ -253,18 +255,6 @@
       btn.textContent = show ? 'Hide' : 'Show'; btn.setAttribute('aria-pressed', show); btn.setAttribute('aria-label', show ? 'Hide passwords' : 'Show passwords');
     });
 
-    // password strength
-    function score(p) {
-      var s = 0; if (p.length >= 8) s++; if (p.length >= 12) s++;
-      if (/[a-z]/.test(p) && /[A-Z]/.test(p)) s++; if (/\d/.test(p) && /[^A-Za-z0-9]/.test(p)) s++;
-      return p.length < 8 ? Math.min(s, 1) : s;
-    }
-    F.pw.addEventListener('input', function () {
-      var p = F.pw.value, s = p ? Math.max(1, score(p)) : 0;
-      meter.setAttribute('data-s', s);
-      meterT.textContent = !p ? 'At least 8 characters. 12 or more is better.' : ['', 'Weak. Add more characters.', 'Okay. Longer is better.', 'Good.', 'Strong.'][s];
-    });
-
     // team lookup
     F.team.addEventListener('input', function () {
       err(F.team, ''); teamInfo.className = 'hint';
@@ -286,7 +276,7 @@
       function fail(input, msg) { err(input, msg); bad.push(input); }
       if (!/^[A-Za-z0-9_-]{3,24}$/.test(u)) fail(F.user, 'Use 3 to 24 letters, numbers, _ or -.'); else err(F.user, '');
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) fail(F.email, 'Enter a valid email address.'); else err(F.email, '');
-      if (p.length < 8) fail(F.pw, 'Password must be at least 8 characters.'); else err(F.pw, '');
+      if (!p) fail(F.pw, 'Choose a password.'); else err(F.pw, '');
       if (F.pw2.value !== p || !F.pw2.value) fail(F.pw2, 'Passwords do not match.'); else err(F.pw2, '');
       var m = mode(), teamName = F.team.value.trim();
       if (m === 'team') {
@@ -305,6 +295,429 @@
       rAlert.textContent = 'Preview only: this connects to the server once the backend is added. You would ' + (m === 'solo' ? 'register as a solo player.' : 'register and request to join ' + teamName + '.');
       rAlert.hidden = false;
     });
+  }
+
+  // ---------- dashboard: countdown + copy buttons ----------
+  var cdEl = document.getElementById('countdown');
+  if (cdEl) {
+    var left = +cdEl.dataset.sec || 7749;
+    function pad(n) { return (n < 10 ? '0' : '') + n; }
+    function showCd() { cdEl.textContent = pad(Math.floor(left / 3600)) + ':' + pad(Math.floor(left % 3600 / 60)) + ':' + pad(left % 60); }
+    showCd(); setInterval(function () { if (left > 0) left--; showCd(); }, 1000);
+  }
+  function copyText(txt) {
+    function fallback() {
+      var ta = document.createElement('textarea'); ta.value = txt; ta.setAttribute('readonly', ''); ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0';
+      document.body.appendChild(ta); ta.select();
+      var ok = false; try { ok = document.execCommand('copy'); } catch (_) {}
+      document.body.removeChild(ta); return ok;
+    }
+    if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(txt).then(function () { return true; }, function () { return fallback(); });
+    return Promise.resolve(fallback());
+  }
+  document.querySelectorAll('[data-copy]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var t = b.textContent;
+      copyText(b.dataset.copy).then(function (ok) { b.textContent = ok ? 'Copied' : 'Press Ctrl+C'; setTimeout(function () { b.textContent = t; }, 1600); });
+    });
+  });
+
+  // ---------- admin: submissions chart (draws itself once, data comes from the page) ----------
+  var ac = document.getElementById('adm-chart');
+  if (ac && ac.dataset.correct) {
+    var corr = ac.dataset.correct.split(',').map(Number), wrong = ac.dataset.wrong.split(',').map(Number),
+        stp = +ac.dataset.step || 15, t0s = (ac.dataset.start || '09:00').split(':'), t0 = (+t0s[0]) * 60 + (+t0s[1]),
+        AN = corr.length, aMax = Math.ceil(Math.max.apply(null, corr.concat(wrong)) / 20) * 20;
+    var AW, AH, AL = 34, AR = 16, AT = 12, AB = 26;
+    function ax(i) { return AL + (AW - AL - AR) * i / (AN - 1); }
+    function ay(v) { return AT + (AH - AT - AB) * (1 - v / aMax); }
+    function hhmm(i) { var m = t0 + i * stp, p = function (n) { return (n < 10 ? '0' : '') + n; }; return p(Math.floor(m / 60)) + ':' + p(m % 60); }
+    function smooth(d) {
+      var p = d.map(function (v, i) { return [ax(i), ay(v)]; }), s = 'M' + p[0][0] + ' ' + p[0][1], i;
+      for (i = 0; i < p.length - 1; i++) {
+        var p0 = p[i - 1] || p[i], p1 = p[i], p2 = p[i + 1], p3 = p[i + 2] || p2;
+        s += 'C' + (p1[0] + (p2[0] - p0[0]) / 6).toFixed(1) + ' ' + Math.min(ay(0), p1[1] + (p2[1] - p0[1]) / 6).toFixed(1) + ' ' + (p2[0] - (p3[0] - p1[0]) / 6).toFixed(1) + ' ' + Math.min(ay(0), p2[1] - (p3[1] - p1[1]) / 6).toFixed(1) + ' ' + p2[0].toFixed(1) + ' ' + p2[1].toFixed(1);
+      }
+      return s;
+    }
+    var aDone = false;
+    function abuild(animate) {
+      AW = Math.max(280, ac.clientWidth); AH = AW < 520 ? 220 : 270; ac.innerHTML = '';
+      var s = el('svg', { viewBox: '0 0 ' + AW + ' ' + AH, width: AW, height: AH, role: 'img', 'aria-label': 'Correct and wrong submissions every 15 minutes since the event started' });
+      for (var g = 0; g <= aMax; g += aMax / 4) {
+        s.appendChild(el('line', { x1: AL, x2: AW - AR, y1: ay(g), y2: ay(g), stroke: '#2b2b2b', 'stroke-dasharray': g ? '2 4' : '' }));
+        s.appendChild(el('text', { x: AL - 8, y: ay(g) + 4, 'text-anchor': 'end' }, g));
+      }
+      (AW < 520 ? [0, 8, AN - 1] : [0, 4, 8, 12, 16, AN - 1]).forEach(function (i) { s.appendChild(el('text', { x: ax(i), y: AH - 7, 'text-anchor': i === AN - 1 ? 'end' : (i === 0 ? 'start' : 'middle') }, hhmm(i))); });
+      [[wrong, '#ff6369'], [corr, '#3dd68c']].forEach(function (z) {
+        var pth = el('path', { d: smooth(z[0]), fill: 'none', stroke: z[1], 'stroke-width': 2, 'stroke-linecap': 'round' }); s.appendChild(pth);
+        if (animate && !reduce) {
+          var len = pth.getTotalLength(); pth.style.strokeDasharray = len; pth.style.strokeDashoffset = len; pth.getBoundingClientRect();
+          pth.style.transition = 'stroke-dashoffset 1.6s cubic-bezier(.3,.7,.2,1)'; pth.style.strokeDashoffset = 0;
+        }
+      });
+      ac.appendChild(s);
+    }
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (es, o) { if (es[0].isIntersecting) { abuild(true); aDone = true; o.disconnect(); } }, { threshold: .3 }).observe(ac);
+    } else { abuild(false); aDone = true; }
+    var art; window.addEventListener('resize', function () { clearTimeout(art); art = setTimeout(function () { if (aDone) abuild(false); }, 120); });
+  }
+
+  // ---------- admin: dialog, toast, tables, actions ----------
+  function toast(msg) {
+    var box = document.querySelector('.toasts');
+    if (!box) { box = document.createElement('div'); box.className = 'toasts'; box.setAttribute('role', 'status'); document.body.appendChild(box); }
+    var t = document.createElement('div'); t.className = 'toast'; t.textContent = msg; box.appendChild(t);
+    setTimeout(function () { t.remove(); }, 3200);
+  }
+  window.rootlineToast = toast;
+  function ask(o, onOk) {
+    if (!window.HTMLDialogElement) { if (confirm(o.title)) onOk(); return; }
+    var d = document.createElement('dialog'); d.className = 'mdl';
+    d.innerHTML = '<div class="mdl__b"><h3></h3><div class="mdl__t"></div></div><div class="mdl__f"><button type="button" class="btn btn--sm" data-x>Cancel</button><button type="button" class="btn btn--sm" data-ok></button></div>';
+    d.querySelector('h3').textContent = o.title;
+    if (o.html) d.querySelector('.mdl__t').appendChild(o.html); else { var p = document.createElement('p'); p.textContent = o.text || ''; d.querySelector('.mdl__t').appendChild(p); }
+    var ok = d.querySelector('[data-ok]'); ok.textContent = o.ok || 'Confirm'; ok.className = 'btn btn--sm ' + (o.danger ? 'btn--del' : 'btn--ok');
+    if (o.noOk) ok.remove();
+    d.querySelector('[data-x]').textContent = o.noOk ? 'Close' : 'Cancel';
+    document.body.appendChild(d);
+    d.addEventListener('close', function () { d.remove(); });
+    d.querySelector('[data-x]').addEventListener('click', function () { d.close(); });
+    ok.addEventListener('click', function () { if (o.validate && o.validate() === false) return; d.close(); if (onOk) onOk(); });
+    d.addEventListener('click', function (e) { if (e.target === d) d.close(); });
+    d.showModal();
+  }
+
+  // filterable, sortable tables: <div data-table data-total="36"> with [data-search], select[data-col], [data-chips], th.sortable, [data-pager], [data-count], tr[data-row]
+  document.querySelectorAll('[data-table]').forEach(function (root) {
+    var q = root.querySelector('[data-search]'), sels = root.querySelectorAll('select[data-col]'), groups = [].slice.call(root.querySelectorAll('[data-chips]')),
+        count = root.querySelector('[data-count]'), emptyCell = root.querySelector('.empty-row'), emptyRow = emptyCell && emptyCell.parentNode,
+        tbody = root.querySelector('tbody'), noun = root.dataset.noun || 'items';
+    function dataRows() { return [].slice.call(tbody.querySelectorAll('tr[data-row]')); }
+    function apply() {
+      var term = q ? q.value.trim().toLowerCase() : '', n = 0;
+      dataRows().forEach(function (r) {
+        var ok = !term || r.textContent.toLowerCase().indexOf(term) > -1;
+        sels.forEach(function (s) { if (s.value && r.dataset[s.dataset.col] !== s.value) ok = false; });
+        groups.forEach(function (g) {
+          var on = g.querySelector('.fchip.on'), v = on ? on.dataset.val : ''; if (!v) return;
+          if (g.dataset.mode === 'max') { if (!(+r.dataset[g.dataset.col] <= +v)) ok = false; } else if (r.dataset[g.dataset.col] !== v) ok = false;
+        });
+        r.hidden = !ok; if (ok) n++;
+      });
+      if (count) count.textContent = 'Showing ' + n + ' of ' + root.dataset.total + ' ' + noun;
+      if (emptyRow) emptyRow.hidden = n > 0;
+    }
+    // label every cell with its column name so rows can become cards on phones
+    var heads = [].map.call(root.querySelectorAll('thead th'), function (th) { return th.textContent.trim(); });
+    dataRows().forEach(function (tr) {
+      [].forEach.call(tr.children, function (td, i) { td.setAttribute('data-l', heads[i] || ''); if (td.querySelector('.act')) td.classList.add('actcell'); });
+    });
+    if (q) q.addEventListener('input', apply);
+    sels.forEach(function (s) { s.addEventListener('change', apply); });
+    groups.forEach(function (g) {
+      g.querySelectorAll('.fchip').forEach(function (b) {
+        b.addEventListener('click', function () { g.querySelectorAll('.fchip').forEach(function (x) { x.classList.toggle('on', x === b); }); apply(); });
+      });
+    });
+    root.addEventListener('refresh', apply);
+
+    // sorting
+    root.querySelectorAll('th.sortable').forEach(function (th) {
+      th.tabIndex = 0;
+      function sortBy() {
+        var idx = th.cellIndex, num = th.dataset.sort === 'num', dir = th.getAttribute('aria-sort') === 'ascending' ? 'descending' : 'ascending';
+        root.querySelectorAll('th.sortable').forEach(function (x) { x.removeAttribute('aria-sort'); });
+        th.setAttribute('aria-sort', dir);
+        var val = function (r) { var t = r.children[idx].textContent.trim().replace(/,/g, ''); return num ? parseFloat(t) || 0 : t.toLowerCase(); };
+        dataRows().sort(function (a, b) {
+          var A = val(a), B = val(b), c = num ? A - B : String(A).localeCompare(String(B), undefined, { numeric: true });
+          return dir === 'ascending' ? c : -c;
+        }).forEach(function (r) { tbody.insertBefore(r, emptyRow || null); });
+      }
+      th.addEventListener('click', sortBy);
+      th.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); sortBy(); } });
+    });
+
+    // pager (the server will supply the other pages)
+    var pg = root.querySelector('[data-pager]');
+    if (pg) {
+      var pages = +pg.dataset.pages || 1, list = pages <= 5 ? Array.apply(null, Array(pages)).map(function (_, i) { return i + 1; }) : [1, 2, 3, '...', pages];
+      var html = '<button type="button" disabled aria-label="Previous page">&lsaquo; Prev</button>';
+      list.forEach(function (p) { html += p === '...' ? '<span>...</span>' : '<button type="button"' + (p === 1 ? ' class="on" aria-current="page"' : '') + ' data-page="' + p + '">' + p + '</button>'; });
+      html += '<button type="button" data-page="2" aria-label="Next page">Next &rsaquo;</button>';
+      pg.innerHTML = html;
+      pg.addEventListener('click', function (e) {
+        var b = e.target.closest('button[data-page]'); if (!b || b.classList.contains('on')) return;
+        toast('Page ' + b.dataset.page + ' of ' + pages + ' loads from the server (preview)');
+      });
+    }
+    apply();
+  });
+
+  function chip(tr, cls, text, sel) { var c = tr.querySelector(sel || '.st'); if (c) { c.className = ('st ' + cls + ' ' + (sel ? sel.slice(1) : '')).trim(); c.textContent = text; } }
+  function drop(tr, what) {
+    var root = tr.closest('[data-table]'); tr.remove();
+    if (root) { root.dataset.total = Math.max(0, (+root.dataset.total || 1) - 1); root.dispatchEvent(new Event('refresh')); }
+    toast(what + ' deleted (preview)');
+  }
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-act]'); if (!b) return;
+    var tr = b.closest('tr'), name = b.dataset.name || (tr && tr.dataset.name) || 'this item', act = b.dataset.act;
+    if (act === 'delete') ask({ title: 'Delete ' + name + '?', text: b.dataset.text || 'This cannot be undone.', ok: 'Delete', danger: true }, function () { drop(tr, name); });
+    if (act === 'live') {
+      var live = tr.dataset.status === 'live';
+      tr.dataset.status = live ? 'hidden' : 'live'; chip(tr, live ? '' : 'st--ok', live ? 'hidden' : 'live');
+      b.textContent = live ? 'Show' : 'Hide'; toast(name + (live ? ' hidden from players' : ' is now live') + ' (preview)');
+    }
+    if (act === 'ban') {
+      var banned = tr.dataset.status === 'banned';
+      var go = function () { tr.dataset.status = banned ? 'active' : 'banned'; chip(tr, banned ? 'st--ok' : 'st--bad', banned ? 'active' : 'banned', '.st-status'); b.textContent = banned ? 'Ban' : 'Unban'; toast(name + (banned ? ' unbanned' : ' banned') + ' (preview)'); };
+      if (banned) go(); else ask({ title: 'Ban ' + name + '?', text: 'They will not be able to sign in or submit flags.', ok: 'Ban user', danger: true }, go);
+    }
+    if (act === 'role') {
+      var isAdmin = tr.dataset.role === 'admin';
+      var go2 = function () { tr.dataset.role = isAdmin ? 'player' : 'admin'; chip(tr, isAdmin ? '' : 'st--warn', isAdmin ? 'player' : 'admin', '.st-role'); b.textContent = isAdmin ? 'Make admin' : 'Make player'; toast(name + ' is now ' + (isAdmin ? 'a player' : 'an admin') + ' (preview)'); };
+      if (isAdmin) go2(); else ask({ title: 'Make ' + name + ' an admin?', text: 'Admins can manage challenges, users and announcements.', ok: 'Make admin' }, go2);
+    }
+    if (act === 'members') {
+      var ul = document.createElement('ul'); ul.className = 'mlist';
+      (tr.dataset.members || '').split(',').forEach(function (m) {
+        var p = m.split(':'); var li = document.createElement('li');
+        li.innerHTML = '<span></span>'; li.firstChild.textContent = p[0]; var i = document.createElement('i'); i.textContent = p[1]; li.firstChild.appendChild(i);
+        if (p[1] !== 'captain') { var rb = document.createElement('button'); rb.type = 'button'; rb.className = 'btn btn--sm btn--del'; rb.textContent = 'Remove'; rb.addEventListener('click', function () { li.remove(); toast(p[0] + ' removed from ' + name + ' (preview)'); }); li.appendChild(rb); }
+        ul.appendChild(li);
+      });
+      ask({ title: name + ' members', html: ul, noOk: true });
+    }
+    if (act === 'invite') {
+      var box = document.createElement('div');
+      box.innerHTML = '<p>They get an email with a link to create their account.</p><div class="f" style="margin-top:16px"><label for="inv-email">Email</label><input id="inv-email" type="email" autocomplete="off"><p class="err" id="inv-err" hidden></p></div><div class="f" style="margin-bottom:0"><label for="inv-role">Role</label><select id="inv-role"><option value="player">Player</option><option value="admin">Admin</option></select></div>';
+      ask({ title: 'Invite a user', html: box, ok: 'Send invite',
+        validate: function () { var v = box.querySelector('#inv-email').value.trim(), bad = !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); box.querySelector('#inv-err').hidden = !bad; box.querySelector('#inv-err').textContent = 'Enter a valid email address.'; box.querySelector('#inv-email').classList.toggle('bad', bad); return !bad; } },
+        function () { toast('Invite sent to ' + box.querySelector('#inv-email').value.trim() + ' (preview)'); });
+    }
+    if (act === 'newteam') {
+      var tb = document.createElement('div');
+      tb.innerHTML = '<div class="f"><label for="nt-name">Team name</label><input id="nt-name" type="text" maxlength="40" autocomplete="off"><p class="err" id="nt-name-e" hidden></p></div><div class="f" style="margin-bottom:0"><label for="nt-cap">Captain username</label><input id="nt-cap" type="text" maxlength="24" autocomplete="off"><p class="err" id="nt-cap-e" hidden></p></div>';
+      ask({ title: 'New team', html: tb, ok: 'Create team',
+        validate: function () {
+          var n = tb.querySelector('#nt-name'), c = tb.querySelector('#nt-cap'), bad = false;
+          [[n, 'Enter a team name.'], [c, 'Enter the captain\'s username.']].forEach(function (p) { var e = tb.querySelector('#' + p[0].id + '-e'), miss = !p[0].value.trim(); e.hidden = !miss; e.textContent = p[1]; p[0].classList.toggle('bad', miss); if (miss) bad = true; });
+          return !bad;
+        } },
+        function () {
+          var root = document.querySelector('[data-table]'), body = root.querySelector('tbody'), first = body.querySelector('tr[data-row]'), nm = tb.querySelector('#nt-name').value.trim(), cap = tb.querySelector('#nt-cap').value.trim();
+          var tr = first.cloneNode(true); tr.hidden = false; tr.dataset.name = nm; tr.dataset.size = 'open'; tr.dataset.members = cap + ':captain';
+          var c = tr.children; c[0].textContent = nm; c[1].textContent = '1 of 4'; c[2].textContent = cap; c[3].textContent = '0'; c[4].textContent = '0'; c[5].textContent = 'Today';
+          body.insertBefore(tr, first); root.dataset.total = (+root.dataset.total || 0) + 1; root.dispatchEvent(new Event('refresh')); toast('Team ' + nm + ' created (preview)');
+        });
+    }
+    if (act === 'preview') {
+      var f = document.getElementById('cform'), g = function (n) { return f.elements[n].value.trim(); };
+      var pv = document.createElement('div'); pv.className = 'pv';
+      var hs = [].filter.call(f.querySelectorAll('[name=hint_text]'), function (i) { return i.value.trim(); }).length;
+      var tag = function (t) { var s = document.createElement('span'); s.className = 'st'; s.textContent = t; return s; };
+      var tags = document.createElement('div'); tags.className = 'chal__tags'; [g('category') || 'category', g('difficulty') || 'difficulty', (g('points') || '0') + ' pts'].forEach(function (t) { tags.appendChild(tag(t)); });
+      var h = document.createElement('h3'); h.textContent = g('title') || 'Untitled challenge';
+      var d = document.createElement('p'); d.textContent = g('description') || 'No description yet.';
+      var m = document.createElement('p'); m.className = 'mute'; m.textContent = hs + (hs === 1 ? ' hint' : ' hints') + ' · Visibility: ' + g('visibility');
+      [tags, h, d, m].forEach(function (n) { pv.appendChild(n); });
+      ask({ title: 'How players will see it', html: pv, noOk: true });
+    }
+    if (act === 'toast') toast(b.dataset.msg || 'Done (preview)');
+  });
+
+  // ---------- admin: announcements (create / edit / delete in the page) ----------
+  var annForm = document.getElementById('ann-form');
+  if (annForm) {
+    var annList = document.getElementById('ann-list'), editing = null, aT = document.getElementById('ann-title'), aB = document.getElementById('ann-body'), aP = document.getElementById('ann-pin'),
+        aSave = document.getElementById('ann-save'), aCancel = document.getElementById('ann-cancel'), aH = document.getElementById('ann-h'), aErr = document.getElementById('ann-title-e'), aBErr = document.getElementById('ann-body-e');
+    function reset() { editing = null; annForm.reset(); aSave.textContent = 'Post announcement'; aCancel.hidden = true; aH.textContent = 'New announcement'; aErr.hidden = aBErr.hidden = true; aT.classList.remove('bad'); aB.classList.remove('bad'); }
+    function pad2(n) { return (n < 10 ? '0' : '') + n; }
+    function nowStr() { var d = new Date(); return pad2(d.getHours()) + ':' + pad2(d.getMinutes()); }
+    function rowHtml(r, title, body, pin, time) {
+      r.dataset.pin = pin ? '1' : '';
+      r.innerHTML = '<div class="arow__h"><time></time><span class="st st--warn"' + (pin ? '' : ' hidden') + '>pinned</span></div><b></b><p></p><div class="act"><button type="button" class="btn btn--sm" data-edit>Edit</button><button type="button" class="btn btn--sm btn--del" data-del>Delete</button></div>';
+      r.querySelector('time').textContent = time; r.querySelector('b').textContent = title; r.querySelector('p').textContent = body;
+    }
+    annForm.addEventListener('submit', function (e) {
+      e.preventDefault(); var t = aT.value.trim(), b = aB.value.trim(), bad = false;
+      aT.classList.toggle('bad', !t); aErr.hidden = !!t; aErr.textContent = 'Enter a title.'; if (!t) bad = true;
+      aB.classList.toggle('bad', !b); aBErr.hidden = !!b; aBErr.textContent = 'Write the message.'; if (!b) bad = true;
+      if (bad) { (t ? aB : aT).focus(); return; }
+      if (editing) { rowHtml(editing, t, b, aP.checked, editing.querySelector('time').textContent); toast('Announcement updated (preview)'); }
+      else { var r = document.createElement('div'); r.className = 'arow'; rowHtml(r, t, b, aP.checked, 'Today ' + nowStr()); annList.insertBefore(r, annList.children[1] || null); toast('Announcement posted (preview)'); }
+      reset();
+    });
+    aCancel.addEventListener('click', reset);
+    annList.addEventListener('click', function (e) {
+      var r = e.target.closest('.arow'); if (!r) return;
+      if (e.target.closest('[data-edit]')) {
+        editing = r; aT.value = r.querySelector('b').textContent; aB.value = r.querySelector('p').textContent; aP.checked = !!r.dataset.pin;
+        aSave.textContent = 'Save changes'; aCancel.hidden = false; aH.textContent = 'Edit announcement'; aT.focus(); annForm.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      }
+      if (e.target.closest('[data-del]')) ask({ title: 'Delete this announcement?', text: r.querySelector('b').textContent, ok: 'Delete', danger: true }, function () { r.remove(); if (editing === r) reset(); toast('Announcement deleted (preview)'); });
+    });
+  }
+
+  // ---------- admin: challenge form ----------
+  var cform = document.getElementById('cform');
+  if (cform) {
+    var CH = {
+      1: { title: 'Cookie monster', cat: 'web', diff: 'easy', pts: 150, min: 50, status: 'live', flag: 'FLAG{cookies_are_not_secrets}', desc: 'The site remembers who you are. Make it remember you as someone else.' },
+      2: { title: 'Login bypass', cat: 'web', diff: 'medium', pts: 300, min: 100, status: 'live', flag: 'FLAG{or_1_equals_1}', desc: 'The admin panel trusts whatever you type. Get in without the password.' },
+      5: { title: 'Weak RSA', cat: 'crypto', diff: 'medium', pts: 300, min: 100, status: 'live', flag: 'FLAG{small_primes_big_problem}', desc: 'The key is shorter than it should be. Recover the message.' },
+      11: { title: 'Stack smash 101', cat: 'pwn', diff: 'hard', pts: 500, min: 100, status: 'live', flag: 'FLAG{return_to_sender}', desc: 'A tiny service with a big mistake. Take control of the program.' },
+      12: { title: 'Heap of trouble', cat: 'pwn', diff: 'hard', pts: 600, min: 150, status: 'scheduled', flag: '', desc: 'Memory is not always yours to keep. Find the use after free.' }
+    };
+    var id = new URLSearchParams(location.search).get('id'), data = CH[id];
+    var $c = function (n) { return cform.elements[n]; };
+    var heading = document.getElementById('cform-h'), when = document.getElementById('when-wrap');
+    if (data) {
+      heading.textContent = 'Edit challenge'; document.title = 'Edit challenge | Rootline';
+      $c('title').value = data.title; $c('category').value = data.cat; $c('difficulty').value = data.diff; $c('points').value = data.pts; $c('min_points').value = data.min;
+      $c('flag').value = data.flag; $c('description').value = data.desc; $c('visibility').value = data.status;
+      if (data.status === 'scheduled') $c('publish_at').value = '2026-04-18T18:00';
+    }
+    function syncWhen() { when.hidden = $c('visibility').value !== 'scheduled'; }
+    $c('visibility').addEventListener('change', syncWhen); syncWhen();
+    var hints = document.getElementById('hints');
+    function syncHints() { var e = document.getElementById('hints-empty'); if (e) e.hidden = hints.children.length > 0; }
+    function addHint(text, cost) {
+      var r = document.createElement('div'); r.className = 'hrow';
+      r.innerHTML = '<input class="in" type="text" name="hint_text" placeholder="Hint text"><input class="in" type="number" min="0" name="hint_cost" placeholder="Cost"><button type="button" class="btn btn--sm btn--del" aria-label="Remove hint">Remove</button>';
+      r.children[0].value = text || ''; r.children[1].value = cost == null ? '' : cost;
+      r.lastChild.addEventListener('click', function () { r.remove(); syncHints(); }); hints.appendChild(r); syncHints();
+    }
+    document.getElementById('add-hint').addEventListener('click', function () { addHint('', 30); });
+    if (id === '5') addHint('Check the key size before you reach for a factoring tool.', 30);
+    function cerr(name, msg) { var el2 = document.getElementById('c-' + name + '-e'), inp = $c(name); inp.classList.toggle('bad', !!msg); el2.hidden = !msg; el2.textContent = msg || ''; return !!msg; }
+    cform.addEventListener('submit', function (e) {
+      e.preventDefault(); var bad = [];
+      if (cerr('title', !$c('title').value.trim() ? 'Enter a title.' : '')) bad.push($c('title'));
+      if (cerr('category', !$c('category').value ? 'Choose a category.' : '')) bad.push($c('category'));
+      if (cerr('difficulty', !$c('difficulty').value ? 'Choose a difficulty.' : '')) bad.push($c('difficulty'));
+      if (cerr('points', !(+$c('points').value > 0) ? 'Points must be more than 0.' : '')) bad.push($c('points'));
+      if (cerr('flag', !$c('flag').value.trim() ? 'Enter the flag.' : '')) bad.push($c('flag'));
+      if (cerr('description', !$c('description').value.trim() ? 'Describe the challenge.' : '')) bad.push($c('description'));
+      var al = document.getElementById('c-alert');
+      if (bad.length) { al.hidden = false; al.textContent = 'Check the highlighted fields and try again.'; bad[0].focus(); return; }
+      al.hidden = true; toast((data ? 'Challenge saved' : 'Challenge created') + ' (preview)');
+      setTimeout(function () { location.href = 'challenges.html'; }, 900);
+    });
+  }
+
+  // ---------- player: challenge board ----------
+  var SOLVED_KEY = 'rootline.solved';
+  function readSolved() { try { return JSON.parse(sessionStorage.getItem(SOLVED_KEY) || '[]'); } catch (_) { return []; } }
+  function saveSolved(id) { try { var s = readSolved(); if (s.indexOf(id) < 0) { s.push(id); sessionStorage.setItem(SOLVED_KEY, JSON.stringify(s)); } } catch (_) {} }
+  var cg = document.getElementById('cg');
+  if (cg) {
+    var cards = [].slice.call(cg.querySelectorAll('.cc')), cat = 'all',
+        cq = document.getElementById('c-search'), cd = document.getElementById('c-diff'), cs = document.getElementById('c-state'),
+        cEmpty = document.getElementById('cg-empty'), cCount = document.getElementById('cg-count');
+    // challenges solved earlier in this preview session
+    var extra = 0;
+    readSolved().forEach(function (id) {
+      var c = cards.filter(function (x) { return +x.dataset.id === id; })[0];
+      if (c && c.dataset.state !== 'solved') {
+        c.dataset.state = 'solved'; c.classList.add('is-solved'); extra += +c.dataset.pts;
+        var o = c.querySelector('.cc__open'); if (o) { o.outerHTML = '<span class="st st--ok">solved</span>'; }
+      }
+    });
+    var nSolved = cards.filter(function (c) { return c.dataset.state === 'solved'; }).length;
+    document.getElementById('prog-n').textContent = nSolved + ' of ' + cards.length + ' solved';
+    document.getElementById('prog-bar').style.setProperty('--w', Math.round(nSolved / cards.length * 100) + '%');
+    document.querySelector('#prog .prog__t span').textContent = (5700 + extra).toLocaleString('en-US') + ' points';
+    function applyCards() {
+      var term = cq.value.trim().toLowerCase(), n = 0;
+      cards.forEach(function (c) {
+        var ok = (cat === 'all' || c.dataset.cat === cat) && (!cd.value || c.dataset.diff === cd.value) && (!cs.value || c.dataset.state === cs.value) && (!term || c.dataset.text.indexOf(term) > -1);
+        c.hidden = !ok; if (ok) n++;
+      });
+      cEmpty.hidden = n > 0; cCount.textContent = 'Showing ' + n + ' of ' + cards.length + ' challenges';
+    }
+    document.querySelectorAll('#cat-tabs [data-cat]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        cat = b.dataset.cat;
+        document.querySelectorAll('#cat-tabs [data-cat]').forEach(function (x) { x.classList.toggle('on', x === b); });
+        applyCards();
+      });
+    });
+    cq.addEventListener('input', applyCards); cd.addEventListener('change', applyCards); cs.addEventListener('change', applyCards);
+  }
+
+  // ---------- player: challenge detail + flag submission (preview) ----------
+  var chal = document.getElementById('chal');
+  if (chal && window.ROOTLINE_CHALLENGES) {
+    var cid = +new URLSearchParams(location.search).get('id');
+    var C = window.ROOTLINE_CHALLENGES.filter(function (x) { return x.id === cid; })[0];
+    if (!C) {
+      chal.innerHTML = '<a class="back" href="challenges.html">&larr; All challenges</a><div class="head"><h1>Challenge not found</h1><p>This challenge does not exist or is not live yet.</p></div>';
+    } else {
+      var $ = function (i) { return document.getElementById(i); };
+      var DIFF = { easy: 'd-easy', medium: 'd-med', hard: 'd-hard' };
+      var solved = !!C.solvedAt || readSolved().indexOf(C.id) > -1, solvedAt = C.solvedAt || 'just now', attempts = 0;
+      document.title = C.name + ' | Rootline';
+      $('chal-title').textContent = C.name; $('chal-blurb').textContent = C.blurb;
+      function tags() {
+        var t = $('chal-tags'); t.innerHTML = '';
+        function add(txt, cls) { var s = document.createElement('span'); s.className = 'st ' + (cls || ''); s.textContent = txt; t.appendChild(s); }
+        add(C.cat); add(C.diff, ''); t.lastChild.classList.add(DIFF[C.diff]); add(C.pts + ' pts'); if (solved) add('solved', 'st--ok');
+      }
+      tags();
+      var p1 = document.createElement('p'); p1.textContent = C.desc; var p2 = document.createElement('p'); p2.textContent = 'Flags look like FLAG{...}. Submit the whole thing, braces included.';
+      $('chal-desc').appendChild(p1); $('chal-desc').appendChild(p2);
+      $('chal-pts').textContent = C.pts + ' pts'; $('chal-solves').textContent = C.solves + (solved && !C.solvedAt ? 1 : 0);
+      $('fb-team').textContent = C.firstBlood; $('fb-time').textContent = C.fbTime;
+      $('chal-diff').textContent = C.diff.charAt(0).toUpperCase() + C.diff.slice(1) + '. Points drop as more teams solve it.';
+      if (C.target) { $('sec-target').hidden = false; $('chal-target').textContent = C.target; $('copy-target').dataset.copy = C.target; $('copy-target').addEventListener('click', function () { copyText(C.target).then(function (ok) { var b = $('copy-target'); b.textContent = ok ? 'Copied' : 'Press Ctrl+C'; setTimeout(function () { b.textContent = 'Copy'; }, 1500); }); }); }
+      if (C.files.length) {
+        $('sec-files').hidden = false;
+        C.files.forEach(function (f) {
+          var r = document.createElement('div'); r.className = 'li';
+          r.innerHTML = '<div class="li__t"><b></b><span></span></div><button type="button" class="btn btn--sm">Download</button>';
+          r.querySelector('b').textContent = f.name; r.querySelector('span').textContent = f.size;
+          r.querySelector('button').addEventListener('click', function () { toast('Download started: ' + f.name + ' (preview)'); });
+          $('chal-files').appendChild(r);
+        });
+      }
+      function renderHints() {
+        var box = $('chal-hints'); box.innerHTML = '';
+        C.hints.forEach(function (h, i) {
+          var r = document.createElement('div'); r.className = 'hint-row';
+          if (h.open) {
+            r.innerHTML = '<div><b></b><span class="sub"></span><p></p></div>';
+            r.querySelector('b').textContent = 'Hint ' + (i + 1); r.querySelector('.sub').textContent = 'Unlocked, cost ' + h.cost + ' points'; r.querySelector('p').textContent = h.text;
+          } else {
+            r.innerHTML = '<div><b></b><span class="sub"></span></div><button type="button" class="btn btn--sm">Unlock</button>';
+            r.querySelector('b').textContent = 'Hint ' + (i + 1); r.querySelector('.sub').textContent = 'Costs ' + h.cost + ' points';
+            r.querySelector('button').addEventListener('click', function () {
+              ask({ title: 'Unlock hint ' + (i + 1) + '?', text: 'This costs ' + h.cost + ' points and cannot be undone.', ok: 'Unlock for ' + h.cost + ' pts' }, function () { h.open = true; renderHints(); toast('Hint unlocked, -' + h.cost + ' points (preview)'); });
+            });
+          }
+          box.appendChild(r);
+        });
+        var n = C.hints.filter(function (h) { return h.open; }).length; $('hint-sum').textContent = n + ' of ' + C.hints.length + ' unlocked';
+      }
+      renderHints();
+      var form = $('flag-form'), inp = $('flag-in'), res = $('flag-res'), btn = $('flag-btn'), ferr = $('flag-in-e');
+      function say(kind, msg) { res.className = 'res res--' + kind; res.textContent = msg; res.hidden = false; }
+      function lock() { inp.disabled = true; btn.disabled = true; btn.textContent = 'Solved'; $('flag-meta').hidden = true; form.querySelector('.demo').hidden = true; }
+      if (solved && C.solvedAt) { say('ok', 'You solved this at ' + C.solvedAt + ' for +' + C.pts + ' points.'); lock(); }
+      inp.addEventListener('input', function () { ferr.hidden = true; inp.classList.remove('bad'); res.hidden = true; });
+      form.addEventListener('submit', function (e) {
+        e.preventDefault(); var v = inp.value.trim();
+        if (!v) { ferr.textContent = 'Enter a flag.'; ferr.hidden = false; inp.classList.add('bad'); inp.focus(); return; }
+        if (!/^FLAG\{.+\}$/.test(v)) { ferr.textContent = 'Flags look like FLAG{...}.'; ferr.hidden = false; inp.classList.add('bad'); inp.focus(); return; }
+        attempts++; $('attempts').textContent = attempts;
+        if (v === 'FLAG{demo}') {
+          solved = true; saveSolved(C.id); tags(); say('ok', 'Correct. +' + C.pts + ' points for your team.'); toast(C.name + ' solved, +' + C.pts + ' points (preview)'); lock(); $('chal-solves').textContent = C.solves + 1;
+        } else { say('bad', 'Incorrect flag. Try again.'); inp.select(); }
+      });
+    }
   }
 
   // ---------- skills chart ----------

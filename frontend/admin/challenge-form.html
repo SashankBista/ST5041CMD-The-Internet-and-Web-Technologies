@@ -34,38 +34,118 @@
 
 <main>
 <div class="wrap adm">
-  <nav class="asb" aria-label="Admin sections"><p>MANAGE</p><a href="../admin/index.html">Overview</a><a href="../admin/challenges.html" class="on">Challenges<em>36</em></a><a href="../admin/users.html">Users<em>214</em></a><a href="../admin/teams.html">Teams<em>48</em></a><a href="../admin/submissions.html">Submissions<em>1.3k</em></a><a href="../admin/announcements.html">Announcements<em>6</em></a><a href="../admin/logs.html">Activity log</a></nav>
+  <nav class="asb" aria-label="Admin sections">
+    <p>OVERVIEW</p>
+    <a href="../admin/index.html">Overview</a>
+    <p>CONTENT</p>
+    <a href="../admin/challenges.html" class="on">Challenges<em>26</em></a>
+    <a href="../admin/announcements.html">Announcements<em>6</em></a>
+    <p>PEOPLE</p>
+    <a href="../admin/users.html">Users<em>136</em></a>
+    <a href="../admin/teams.html">Teams<em>48</em></a>
+    <p>DATA</p>
+    <a href="../admin/submissions.html">Submissions<em>1.3k</em></a>
+    <a href="../admin/logs.html">Activity log</a>
+  </nav>
   <div class="adm__main">
-    <div class="dash__head"><div><h1 id="cform-h">New challenge</h1><p>Players see the title, description, hints and files once it is live.</p></div></div>
+    <div class="dash__head">
+      <div>
+        <h1 id="cform-h">New challenge</h1>
+        <p>Players see the title, description, hints and files once it is live.</p>
+      </div>
+    </div>
     <form class="form" id="cform" novalidate>
       <div class="alert" id="c-alert" role="alert" hidden></div>
       <section class="pn">
         <div class="pn__h"><h2>Details</h2></div>
         <div class="pn__b">
-          <div class="f"><label for="c-title">Title</label><input id="c-title" name="title" type="text" maxlength="80"><p class="err" id="c-title-e" hidden></p></div>
-          <div class="f3">
-            <div class="f"><label for="c-cat">Category</label><select id="c-cat" name="category"><option value="">Choose...</option><option value="web">Web</option><option value="crypto">Crypto</option><option value="forensics">Forensics</option><option value="reverse">Reverse</option><option value="pwn">Pwn</option><option value="misc">Misc</option></select><p class="err" id="c-category-e" hidden></p></div>
-            <div class="f"><label for="c-diff">Difficulty</label><select id="c-diff" name="difficulty"><option value="">Choose...</option><option value="easy">Easy</option><option value="medium">Medium</option><option value="hard">Hard</option></select><p class="err" id="c-difficulty-e" hidden></p></div>
-            <div class="f"><label for="c-vis">Visibility</label><select id="c-vis" name="visibility"><option value="live">Live</option><option value="hidden">Hidden</option><option value="scheduled">Scheduled</option></select></div>
+          <div class="f">
+            <label for="c-title">Title</label>
+            <input id="c-title" name="title" type="text" maxlength="80">
+            <p class="err" id="c-title-e" hidden></p>
           </div>
           <div class="f3">
-            <div class="f"><label for="c-pts">Points</label><input id="c-pts" name="points" type="number" min="1" step="1" value="100"><p class="err" id="c-points-e" hidden></p></div>
-            <div class="f"><label for="c-min">Minimum points</label><input id="c-min" name="min_points" type="number" min="0" step="1" value="50"><p class="hint">Value never drops below this.</p></div>
-            <div class="f" id="when-wrap" hidden><label for="c-when">Goes live at</label><input id="c-when" name="publish_at" type="datetime-local"></div>
+            <div class="f">
+              <label for="c-cat">Category</label>
+              <select id="c-cat" name="category">
+                <option value="">Choose...</option>
+                <option value="web">Web</option><option value="crypto">Crypto</option><option value="forensics">Forensics</option><option value="reverse">Reverse</option><option value="pwn">Pwn</option><option value="misc">Misc</option>
+              </select>
+              <p class="err" id="c-category-e" hidden></p>
+            </div>
+            <div class="f">
+              <label for="c-diff">Difficulty</label>
+              <select id="c-diff" name="difficulty">
+                <option value="">Choose...</option>
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
+              </select>
+              <p class="err" id="c-difficulty-e" hidden></p>
+            </div>
+            <div class="f">
+              <label for="c-vis">Visibility</label>
+              <select id="c-vis" name="visibility">
+                <option value="live">Live</option>
+                <option value="hidden">Hidden</option>
+                <option value="scheduled">Scheduled</option>
+              </select>
+            </div>
           </div>
-          <div class="f"><label for="c-desc">Description</label><textarea id="c-desc" name="description"></textarea><p class="err" id="c-description-e" hidden></p></div>
-          <div class="f"><label for="c-flag">Flag</label><input id="c-flag" name="flag" type="text" autocomplete="off" spellcheck="false" placeholder="FLAGEllipsis" style="font-family:var(--mono)"><p class="err" id="c-flag-e" hidden></p></div>
+          <div class="f3">
+            <div class="f">
+              <label for="c-pts">Points</label>
+              <input id="c-pts" name="points" type="number" min="1" step="1" value="100">
+              <p class="err" id="c-points-e" hidden></p>
+            </div>
+            <div class="f">
+              <label for="c-min">Minimum points</label>
+              <input id="c-min" name="min_points" type="number" min="0" step="1" value="50">
+              <p class="hint">Value never drops below this.</p>
+            </div>
+            <div class="f" id="when-wrap" hidden>
+              <label for="c-when">Goes live at</label>
+              <input id="c-when" name="publish_at" type="datetime-local">
+            </div>
+          </div>
+          <div class="f">
+            <label for="c-desc">Description</label>
+            <textarea id="c-desc" name="description"></textarea>
+            <p class="err" id="c-description-e" hidden></p>
+          </div>
+          <div class="f">
+            <label for="c-flag">Flag</label>
+            <input id="c-flag" name="flag" type="text" class="mono-in" autocomplete="off" spellcheck="false" placeholder="FLAG{...}">
+            <p class="err" id="c-flag-e" hidden></p>
+          </div>
         </div>
       </section>
       <section class="pn">
-        <div class="pn__h"><h2>Hints</h2><button type="button" class="btn btn--sm" id="add-hint">Add hint</button></div>
-        <div class="pn__b"><p class="stack-hint">Each hint can cost the player some points to unlock.</p><div id="hints"></div></div>
+        <div class="pn__h">
+          <h2>Hints</h2>
+          <button type="button" class="btn btn--sm" id="add-hint">Add hint</button>
+        </div>
+        <div class="pn__b">
+          <p class="stack-hint">Each hint can cost the player some points to unlock.</p>
+          <div id="hints"></div>
+          <p class="mute empty-note" id="hints-empty">No hints yet. Add one if players might get stuck.</p>
+        </div>
       </section>
       <section class="pn">
         <div class="pn__h"><h2>Files</h2></div>
-        <div class="pn__b"><div class="f"><label for="c-file">Attachment</label><input id="c-file" name="file" type="file"><p class="hint">Source code, binaries or captures players need to download.</p></div></div>
+        <div class="pn__b">
+          <div class="f">
+            <label for="c-file">Attachment</label>
+            <input id="c-file" name="file" type="file">
+            <p class="hint">Source code, binaries or captures players need to download.</p>
+          </div>
+        </div>
       </section>
-      <div class="formbar"><a class="btn" href="../admin/challenges.html">Cancel</a><button class="btn btn--w" type="submit">Save challenge</button></div>
+      <div class="formbar">
+        <a class="btn" href="../admin/challenges.html">Cancel</a>
+        <button type="button" class="btn" data-act="preview">Preview</button>
+        <button class="btn btn--w" type="submit">Save challenge</button>
+      </div>
     </form>
   </div>
 </div>

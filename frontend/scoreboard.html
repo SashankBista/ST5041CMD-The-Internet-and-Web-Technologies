@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Scoreboard | Rootline</title>
-<meta name="description" content="Host capture-the-flag events with hashed flags, rate-limited submissions, role-based access and a full audit trail.">
+<meta name="description" content="Host capture-the-flag events: challenges, teams, flag checking and live scoring in one place.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -12,57 +12,62 @@
 </head>
 <body>
 
-<div class="banner">Spring CTF registration is open.<a href="register.html">Register now</a></div>
-
-<header class="nav">
+<header class="nav" id="nav">
   <div class="wrap nav__in">
     <a href="index.html" class="brand">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3v18"/><path d="M12 11l-6 6"/><path d="M12 11l6 6"/><path d="M8 3h8"/></svg>
       rootline
     </a>
     <ul class="menu">
-      <li><a href="challenges.html" class="">Challenges</a></li>
+      <li><a href="dashboard.html">Dashboard</a></li>
+      <li><a href="challenges.html">Challenges</a></li>
       <li><a href="scoreboard.html" class="on">Scoreboard</a></li>
       <li><a href="rules.html">Rules</a></li>
     </ul>
     <div class="nav__sp"></div>
     <div class="nav__r">
-      <details class="who"><summary>NB</summary><div><a href="challenges.html">My challenges</a><a href="index.html">Sign out</a></div></details>
+      <details class="who"><summary>NB</summary><div><span class="who__n">nullbyte · player</span><a href="dashboard.html">Dashboard</a><a href="submissions.html">My submissions</a><a href="challenges.html">Challenges</a><a href="index.html">Sign out</a></div></details>
       <button class="burger" aria-label="Menu">Menu</button>
     </div>
   </div>
 </header>
 
 <main>
-<div class="wrap"><div class="head"><h1 style="font-size:clamp(2.2rem,5vw,3.6rem)">scoreboard</h1><p style="margin-top:16px">Visible to signed-in players only.</p></div>
-<div class="tbl"><table>
-<thead><tr><th>Rank</th><th>Team</th><th class="n">Solves</th><th class="n">Score</th><th>Last solve</th></tr></thead>
-<tbody>
-<tr><td class="mono">1</td><td>r00tkit</td><td class="n">22</td><td class="n">6,400</td><td class="mono">14:02:11</td></tr>
-<tr><td class="mono">2</td><td>stackoverflown</td><td class="n">20</td><td class="n">5,950</td><td class="mono">13:48:30</td></tr>
-<tr class="me"><td class="mono">3</td><td>nullbyte (you)</td><td class="n">19</td><td class="n">5,700</td><td class="mono">13:41:02</td></tr>
-<tr><td class="mono">4</td><td>segfault</td><td class="n">17</td><td class="n">5,100</td><td class="mono">13:12:47</td></tr>
-<tr><td class="mono">5</td><td>0xdeadbeef</td><td class="n">15</td><td class="n">4,350</td><td class="mono">12:55:09</td></tr>
-</tbody></table></div></div><div style="height:60px"></div>
-</main>
-
-<footer class="footer">
-  <div class="wrap">
-    <div class="footer__g">
-      <div class="footer__a">
-        <a href="index.html" class="brand"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3v18"/><path d="M12 11l-6 6"/><path d="M12 11l6 6"/><path d="M8 3h8"/></svg>rootline</a>
-        <p>Secure CTF Hosting and Scoring Platform. A university ethical hacking project.</p>
-        <span class="status"><i></i>All systems operational</span>
-      </div>
-      <div><h4>Platform</h4><ul><li><a href="#platform">Challenge board</a></li><li><a href="#platform">Flag checking</a></li><li><a href="#platform">Dynamic scoring</a></li><li><a href="#platform">Audit log</a></li></ul></div>
-      <div><h4>Categories</h4><ul><li><a href="#categories">Web</a></li><li><a href="#categories">Crypto</a></li><li><a href="#categories">Forensics</a></li><li><a href="#categories">Reverse and pwn</a></li></ul></div>
-      <div><h4>Resources</h4><ul><li><a href="rules.html">Rules</a></li><li><a href="#">Vulnerability log</a></li><li><a href="#">Test report</a></li></ul></div>
-      <div><h4>Project</h4><ul><li><a href="#">GitHub</a></li><li><a href="login.html">Sign in</a></li><li><a href="register.html">Register</a></li></ul></div>
-    </div>
-    <div class="footer__b"><span>&copy; 2026 Secure CTF Hosting and Scoring Platform. Authorized targets only.</span><ul><li><a href="rules.html">Rules</a></li></ul></div>
+<div class="wrap page-pad">
+  <div class="head">
+    <h1>Scoreboard</h1>
+    <p>Visible to signed-in players only.</p>
   </div>
-</footer>
-
+  <div class="fbar">
+    <div class="fbar__l"><span>Active in the last</span>
+      <div class="tags"><button type="button" class="tag on" data-win="all">Any time</button><button type="button" class="tag" data-win="1440">Day</button><button type="button" class="tag" data-win="60">Hour</button></div>
+    </div>
+    <div class="fbar__r"><span class="mono" id="sb-updated">Updated 14:05:00</span><button type="button" class="btn btn--sm" id="sb-refresh">Refresh</button></div>
+  </div>
+  <div class="tbl"><table>
+    <thead><tr><th>Rank</th><th>Team</th><th class="n">Solves</th><th class="n">Score</th><th>Last solve</th></tr></thead>
+    <tbody id="sb-body">
+          <tr data-min="3"><td class="mono">1</td><td>r00tkit</td><td class="n">22</td><td class="n">6,400</td><td class="mono">14:02:11</td></tr>
+          <tr data-min="17"><td class="mono">2</td><td>stackoverflown</td><td class="n">20</td><td class="n">5,950</td><td class="mono">13:48:30</td></tr>
+          <tr class="me" data-min="24"><td class="mono">3</td><td>nullbyte (you)</td><td class="n">19</td><td class="n">5,700</td><td class="mono">13:41:02</td></tr>
+          <tr data-min="53"><td class="mono">4</td><td>segfault</td><td class="n">17</td><td class="n">5,100</td><td class="mono">13:12:47</td></tr>
+          <tr data-min="70"><td class="mono">5</td><td>0xdeadbeef</td><td class="n">15</td><td class="n">4,350</td><td class="mono">12:55:09</td></tr>
+          <tr data-min="85"><td class="mono">6</td><td>packet_loss</td><td class="n">14</td><td class="n">4,100</td><td class="mono">12:40:31</td></tr>
+          <tr data-min="127"><td class="mono">7</td><td>sudo_su</td><td class="n">13</td><td class="n">3,800</td><td class="mono">11:58:12</td></tr>
+          <tr data-min="165"><td class="mono">8</td><td>zero_day</td><td class="n">12</td><td class="n">3,500</td><td class="mono">11:20:44</td></tr>
+          <tr data-min="198"><td class="mono">9</td><td>null_pointer</td><td class="n">11</td><td class="n">3,150</td><td class="mono">10:47:03</td></tr>
+          <tr data-min="230"><td class="mono">10</td><td>fuzzy_bunny</td><td class="n">10</td><td class="n">2,900</td><td class="mono">10:15:26</td></tr>
+          <tr data-min="253" data-more="1"><td class="mono">11</td><td>heap_spray</td><td class="n">9</td><td class="n">2,600</td><td class="mono">09:52:18</td></tr>
+          <tr data-min="265" data-more="1"><td class="mono">12</td><td>bit_flip</td><td class="n">8</td><td class="n">2,250</td><td class="mono">09:40:51</td></tr>
+          <tr data-min="274" data-more="1"><td class="mono">13</td><td>tcp_syn</td><td class="n">7</td><td class="n">1,900</td><td class="mono">09:31:07</td></tr>
+          <tr data-min="287" data-more="1"><td class="mono">14</td><td>cache_miss</td><td class="n">6</td><td class="n">1,500</td><td class="mono">09:18:33</td></tr>
+          <tr data-min="300" data-more="1"><td class="mono">15</td><td>dead_code</td><td class="n">5</td><td class="n">1,100</td><td class="mono">09:05:40</td></tr>
+          <tr id="sb-empty" hidden><td colspan="5" class="empty">No solves yet. Be the first.</td></tr>
+    </tbody></table></div>
+  <div class="tfoot"><span id="sb-count">Showing 10 of 48 teams</span><button type="button" class="btn btn--sm" id="sb-more">Load more</button></div>
+</div>
+</main>
+<footer class="footer footer--slim"><div class="wrap footer__b"><span>&copy; 2026 Rootline. Authorized targets only.</span><ul><li><a href="rules.html">Rules</a></li><li><a href="index.html">Sign out</a></li></ul></div></footer>
 <script src="assets/js/main.js"></script>
 </body>
 </html>

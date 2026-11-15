@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Challenges | Rootline</title>
-<meta name="description" content="Host capture-the-flag events with hashed flags, rate-limited submissions, role-based access and a full audit trail.">
+<meta name="description" content="Host capture-the-flag events: challenges, teams, flag checking and live scoring in one place.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -12,48 +12,72 @@
 </head>
 <body>
 
-<div class="banner">Spring CTF registration is open.<a href="register.html">Register now</a></div>
-
-<header class="nav">
+<header class="nav" id="nav">
   <div class="wrap nav__in">
     <a href="index.html" class="brand">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3v18"/><path d="M12 11l-6 6"/><path d="M12 11l6 6"/><path d="M8 3h8"/></svg>
       rootline
     </a>
     <ul class="menu">
+      <li><a href="dashboard.html">Dashboard</a></li>
       <li><a href="challenges.html" class="on">Challenges</a></li>
-      <li><a href="scoreboard.html" class="">Scoreboard</a></li>
+      <li><a href="scoreboard.html">Scoreboard</a></li>
       <li><a href="rules.html">Rules</a></li>
     </ul>
     <div class="nav__sp"></div>
     <div class="nav__r">
-      <details class="who"><summary>NB</summary><div><a href="challenges.html">My challenges</a><a href="index.html">Sign out</a></div></details>
+      <details class="who"><summary>NB</summary><div><span class="who__n">nullbyte · player</span><a href="dashboard.html">Dashboard</a><a href="submissions.html">My submissions</a><a href="challenges.html">Challenges</a><a href="index.html">Sign out</a></div></details>
       <button class="burger" aria-label="Menu">Menu</button>
     </div>
   </div>
 </header>
 
 <main>
-<div class="wrap"><div class="head"><h1 style="font-size:clamp(2.2rem,5vw,3.6rem)">challenges</h1><p style="margin-top:16px">Placeholder page. We build this once the theme is approved.</p></div></div>
-</main>
-
-<footer class="footer">
-  <div class="wrap">
-    <div class="footer__g">
-      <div class="footer__a">
-        <a href="index.html" class="brand"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3v18"/><path d="M12 11l-6 6"/><path d="M12 11l6 6"/><path d="M8 3h8"/></svg>rootline</a>
-        <p>Secure CTF Hosting and Scoring Platform. A university ethical hacking project.</p>
-        <span class="status"><i></i>All systems operational</span>
-      </div>
-      <div><h4>Platform</h4><ul><li><a href="#platform">Challenge board</a></li><li><a href="#platform">Flag checking</a></li><li><a href="#platform">Dynamic scoring</a></li><li><a href="#platform">Audit log</a></li></ul></div>
-      <div><h4>Categories</h4><ul><li><a href="#categories">Web</a></li><li><a href="#categories">Crypto</a></li><li><a href="#categories">Forensics</a></li><li><a href="#categories">Reverse and pwn</a></li></ul></div>
-      <div><h4>Resources</h4><ul><li><a href="rules.html">Rules</a></li><li><a href="#">Vulnerability log</a></li><li><a href="#">Test report</a></li></ul></div>
-      <div><h4>Project</h4><ul><li><a href="#">GitHub</a></li><li><a href="login.html">Sign in</a></li><li><a href="register.html">Register</a></li></ul></div>
-    </div>
-    <div class="footer__b"><span>&copy; 2026 Secure CTF Hosting and Scoring Platform. Authorized targets only.</span><ul><li><a href="rules.html">Rules</a></li></ul></div>
+<div class="wrap page-pad">
+  <div class="head"><h1>Challenges</h1><p>Open a challenge, read the brief and submit the flag you find.</p></div>
+  <div class="prog" id="prog">
+    <div class="prog__t"><b id="prog-n">19 of 24 solved</b><span>5,700 points</span></div>
+    <div class="pg__t"><i id="prog-bar" style="--w:79%"></i></div>
   </div>
-</footer>
-
+  <div class="cbar">
+    <div class="tags" id="cat-tabs"><button type="button" class="tag on" data-cat="all">All <em>24</em></button><button type="button" class="tag" data-cat="web">Web <em>6</em></button><button type="button" class="tag" data-cat="crypto">Crypto <em>5</em></button><button type="button" class="tag" data-cat="forensics">Forensics <em>4</em></button><button type="button" class="tag" data-cat="reverse">Reverse <em>4</em></button><button type="button" class="tag" data-cat="pwn">Pwn <em>5</em></button></div>
+    <div class="cbar__r">
+      <input class="in" type="search" id="c-search" placeholder="Search challenges" aria-label="Search challenges">
+      <select class="in" id="c-diff" aria-label="Difficulty"><option value="">All difficulties</option><option value="easy">Easy</option><option value="medium">Medium</option><option value="hard">Hard</option></select>
+      <select class="in" id="c-state" aria-label="Status"><option value="">Open and solved</option><option value="open">Open only</option><option value="solved">Solved only</option></select>
+    </div>
+  </div>
+  <div class="cg" id="cg">
+<a class="cc is-solved" href="challenge.html?id=14" data-id="14" data-cat="web" data-diff="easy" data-state="solved" data-pts="100" data-text="robots rule some pages are hidden on purpose."><div class="cc__t"><span>web</span><span>100 pts</span></div><h3>Robots rule</h3><p>Some pages are hidden on purpose.</p><div class="cc__b"><span class="d-easy">easy</span><span>58 solves</span><span class="st st--ok">solved</span></div></a>
+<a class="cc is-solved" href="challenge.html?id=1" data-id="1" data-cat="web" data-diff="easy" data-state="solved" data-pts="150" data-text="cookie monster the site remembers who you are. make it remember someone else."><div class="cc__t"><span>web</span><span>150 pts</span></div><h3>Cookie monster</h3><p>The site remembers who you are. Make it remember someone else.</p><div class="cc__b"><span class="d-easy">easy</span><span>41 solves</span><span class="st st--ok">solved</span></div></a>
+<a class="cc is-solved" href="challenge.html?id=2" data-id="2" data-cat="web" data-diff="medium" data-state="solved" data-pts="300" data-text="login bypass the admin panel trusts whatever you type."><div class="cc__t"><span>web</span><span>300 pts</span></div><h3>Login bypass</h3><p>The admin panel trusts whatever you type.</p><div class="cc__b"><span class="d-med">medium</span><span>24 solves</span><span class="st st--ok">solved</span></div></a>
+<a class="cc is-solved" href="challenge.html?id=15" data-id="15" data-cat="web" data-diff="medium" data-state="solved" data-pts="300" data-text="hidden form not every field is meant for you."><div class="cc__t"><span>web</span><span>300 pts</span></div><h3>Hidden form</h3><p>Not every field is meant for you.</p><div class="cc__b"><span class="d-med">medium</span><span>20 solves</span><span class="st st--ok">solved</span></div></a>
+<a class="cc is-solved" href="challenge.html?id=16" data-id="16" data-cat="web" data-diff="medium" data-state="solved" data-pts="350" data-text="header hunt the server talks to you in headers."><div class="cc__t"><span>web</span><span>350 pts</span></div><h3>Header hunt</h3><p>The server talks to you in headers.</p><div class="cc__b"><span class="d-med">medium</span><span>17 solves</span><span class="st st--ok">solved</span></div></a>
+<a class="cc" href="challenge.html?id=3" data-id="3" data-cat="web" data-diff="hard" data-state="open" data-pts="450" data-text="template trouble the greeting page says more than it should."><div class="cc__t"><span>web</span><span>450 pts</span></div><h3>Template trouble</h3><p>The greeting page says more than it should.</p><div class="cc__b"><span class="d-hard">hard</span><span>9 solves</span><span class="cc__open">open</span></div></a>
+<a class="cc is-solved" href="challenge.html?id=4" data-id="4" data-cat="crypto" data-diff="easy" data-state="solved" data-pts="100" data-text="caesar's second try shift every letter. then shift again."><div class="cc__t"><span>crypto</span><span>100 pts</span></div><h3>Caesar's second try</h3><p>Shift every letter. Then shift again.</p><div class="cc__b"><span class="d-easy">easy</span><span>52 solves</span><span class="st st--ok">solved</span></div></a>
+<a class="cc is-solved" href="challenge.html?id=17" data-id="17" data-cat="crypto" data-diff="easy" data-state="solved" data-pts="150" data-text="base nonsense encoding is not encryption."><div class="cc__t"><span>crypto</span><span>150 pts</span></div><h3>Base nonsense</h3><p>Encoding is not encryption.</p><div class="cc__b"><span class="d-easy">easy</span><span>47 solves</span><span class="st st--ok">solved</span></div></a>
+<a class="cc is-solved" href="challenge.html?id=6" data-id="6" data-cat="crypto" data-diff="medium" data-state="solved" data-pts="200" data-text="xor everything one key, used again and again."><div class="cc__t"><span>crypto</span><span>200 pts</span></div><h3>XOR everything</h3><p>One key, used again and again.</p><div class="cc__b"><span class="d-med">medium</span><span>31 solves</span><span class="st st--ok">solved</span></div></a>
+<a class="cc" href="challenge.html?id=5" data-id="5" data-cat="crypto" data-diff="medium" data-state="open" data-pts="300" data-text="weak rsa the key is shorter than it should be."><div class="cc__t"><span>crypto</span><span>300 pts</span></div><h3>Weak RSA</h3><p>The key is shorter than it should be.</p><div class="cc__b"><span class="d-med">medium</span><span>9 solves</span><span class="cc__open">open</span></div></a>
+<a class="cc is-solved" href="challenge.html?id=18" data-id="18" data-cat="crypto" data-diff="hard" data-state="solved" data-pts="450" data-text="padding pain the server tells you when the padding is wrong."><div class="cc__t"><span>crypto</span><span>450 pts</span></div><h3>Padding pain</h3><p>The server tells you when the padding is wrong.</p><div class="cc__b"><span class="d-hard">hard</span><span>11 solves</span><span class="st st--ok">solved</span></div></a>
+<a class="cc is-solved" href="challenge.html?id=8" data-id="8" data-cat="forensics" data-diff="easy" data-state="solved" data-pts="200" data-text="hidden layers an image hides more than it shows."><div class="cc__t"><span>forensics</span><span>200 pts</span></div><h3>Hidden layers</h3><p>An image hides more than it shows.</p><div class="cc__b"><span class="d-easy">easy</span><span>27 solves</span><span class="st st--ok">solved</span></div></a>
+<a class="cc" href="challenge.html?id=7" data-id="7" data-cat="forensics" data-diff="medium" data-state="open" data-pts="250" data-text="ghost in the pcap someone sent a secret over the wire."><div class="cc__t"><span>forensics</span><span>250 pts</span></div><h3>Ghost in the pcap</h3><p>Someone sent a secret over the wire.</p><div class="cc__b"><span class="d-med">medium</span><span>18 solves</span><span class="cc__open">open</span></div></a>
+<a class="cc is-solved" href="challenge.html?id=19" data-id="19" data-cat="forensics" data-diff="medium" data-state="solved" data-pts="350" data-text="lost partition a disk image with a missing file."><div class="cc__t"><span>forensics</span><span>350 pts</span></div><h3>Lost partition</h3><p>A disk image with a missing file.</p><div class="cc__b"><span class="d-med">medium</span><span>14 solves</span><span class="st st--ok">solved</span></div></a>
+<a class="cc is-solved" href="challenge.html?id=20" data-id="20" data-cat="forensics" data-diff="hard" data-state="solved" data-pts="500" data-text="memory lane a memory dump from a running machine."><div class="cc__t"><span>forensics</span><span>500 pts</span></div><h3>Memory lane</h3><p>A memory dump from a running machine.</p><div class="cc__b"><span class="d-hard">hard</span><span>8 solves</span><span class="st st--ok">solved</span></div></a>
+<a class="cc is-solved" href="challenge.html?id=9" data-id="9" data-cat="reverse" data-diff="easy" data-state="solved" data-pts="250" data-text="strings attached the answer is already in the file."><div class="cc__t"><span>reverse</span><span>250 pts</span></div><h3>Strings attached</h3><p>The answer is already in the file.</p><div class="cc__b"><span class="d-easy">easy</span><span>22 solves</span><span class="st st--ok">solved</span></div></a>
+<a class="cc is-solved" href="challenge.html?id=21" data-id="21" data-cat="reverse" data-diff="medium" data-state="solved" data-pts="350" data-text="packed lunch the program unpacks itself while running."><div class="cc__t"><span>reverse</span><span>350 pts</span></div><h3>Packed lunch</h3><p>The program unpacks itself while running.</p><div class="cc__b"><span class="d-med">medium</span><span>12 solves</span><span class="st st--ok">solved</span></div></a>
+<a class="cc is-solved" href="challenge.html?id=22" data-id="22" data-cat="reverse" data-diff="medium" data-state="solved" data-pts="400" data-text="spaghetti code hard to read on purpose."><div class="cc__t"><span>reverse</span><span>400 pts</span></div><h3>Spaghetti code</h3><p>Hard to read on purpose.</p><div class="cc__b"><span class="d-med">medium</span><span>10 solves</span><span class="st st--ok">solved</span></div></a>
+<a class="cc" href="challenge.html?id=10" data-id="10" data-cat="reverse" data-diff="hard" data-state="open" data-pts="450" data-text="crackme.exe find the check and get past it."><div class="cc__t"><span>reverse</span><span>450 pts</span></div><h3>Crackme.exe</h3><p>Find the check and get past it.</p><div class="cc__b"><span class="d-hard">hard</span><span>5 solves</span><span class="cc__open">open</span></div></a>
+<a class="cc is-solved" href="challenge.html?id=23" data-id="23" data-cat="pwn" data-diff="easy" data-state="solved" data-pts="250" data-text="buffer basics write more than the program expects."><div class="cc__t"><span>pwn</span><span>250 pts</span></div><h3>Buffer basics</h3><p>Write more than the program expects.</p><div class="cc__b"><span class="d-easy">easy</span><span>36 solves</span><span class="st st--ok">solved</span></div></a>
+<a class="cc is-solved" href="challenge.html?id=24" data-id="24" data-cat="pwn" data-diff="medium" data-state="solved" data-pts="400" data-text="format fumble the program prints what you tell it to."><div class="cc__t"><span>pwn</span><span>400 pts</span></div><h3>Format fumble</h3><p>The program prints what you tell it to.</p><div class="cc__b"><span class="d-med">medium</span><span>15 solves</span><span class="st st--ok">solved</span></div></a>
+<a class="cc is-solved" href="challenge.html?id=25" data-id="25" data-cat="pwn" data-diff="medium" data-state="solved" data-pts="450" data-text="ret2win jump to the function you are not supposed to reach."><div class="cc__t"><span>pwn</span><span>450 pts</span></div><h3>Ret2win</h3><p>Jump to the function you are not supposed to reach.</p><div class="cc__b"><span class="d-med">medium</span><span>12 solves</span><span class="st st--ok">solved</span></div></a>
+<a class="cc" href="challenge.html?id=11" data-id="11" data-cat="pwn" data-diff="hard" data-state="open" data-pts="500" data-text="stack smash 101 a tiny service with a big mistake."><div class="cc__t"><span>pwn</span><span>500 pts</span></div><h3>Stack smash 101</h3><p>A tiny service with a big mistake.</p><div class="cc__b"><span class="d-hard">hard</span><span>3 solves</span><span class="cc__open">open</span></div></a>
+<a class="cc is-solved" href="challenge.html?id=26" data-id="26" data-cat="pwn" data-diff="hard" data-state="solved" data-pts="550" data-text="canary cage a guard value stands between you and the return."><div class="cc__t"><span>pwn</span><span>550 pts</span></div><h3>Canary cage</h3><p>A guard value stands between you and the return.</p><div class="cc__b"><span class="d-hard">hard</span><span>6 solves</span><span class="st st--ok">solved</span></div></a>
+  </div>
+  <div class="cg__empty" id="cg-empty" hidden>No challenges match these filters.</div>
+  <p class="cg__count" id="cg-count">Showing 24 of 24 challenges</p>
+</div>
+</main>
+<footer class="footer footer--slim"><div class="wrap footer__b"><span>&copy; 2026 Rootline. Authorized targets only.</span><ul><li><a href="rules.html">Rules</a></li><li><a href="index.html">Sign out</a></li></ul></div></footer>
 <script src="assets/js/main.js"></script>
 </body>
 </html>
