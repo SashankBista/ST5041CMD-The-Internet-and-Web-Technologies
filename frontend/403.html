@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Access denied | Rootline</title>
+<meta name="description" content="Host capture-the-flag events: challenges, teams, flag checking and live scoring in one place.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<header class="nav" id="nav">
+  <div class="wrap nav__in">
+    <a href="index.html" class="brand">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3v18"/><path d="M12 11l-6 6"/><path d="M12 11l6 6"/><path d="M8 3h8"/></svg>
+      rootline
+    </a>
+    <ul class="menu">
+      <li><button class="caret">Platform</button>
+        <div class="drop">
+          <a href="index.html#platform"><b>Challenge board</b><span>Categories, difficulty, hints and files</span></a>
+          <a href="index.html#platform"><b>Flag checking</b><span>Instant checks and points</span></a>
+          <a href="index.html#platform"><b>Dynamic scoring</b><span>Points that change with solves</span></a>
+          <a href="index.html#platform"><b>Activity log</b><span>Submissions, logins and admin changes</span></a>
+        </div></li>
+      <li><button class="caret">Categories</button>
+        <div class="drop">
+          <a href="index.html#categories"><b>Web exploitation</b><span>Injection, auth bypass, XSS</span></a>
+          <a href="index.html#categories"><b>Cryptography</b><span>Ciphers, hashes, key misuse</span></a>
+          <a href="index.html#categories"><b>Forensics</b><span>Disk, memory and packet analysis</span></a>
+          <a href="index.html#categories"><b>Reverse and pwn</b><span>Binaries, memory and shellcode</span></a>
+        </div></li>
+      <li><a href="rules.html">Rules</a></li>
+      <li class="menu__m"><a href="login.html">Sign in</a></li>
+    </ul>
+    <div class="nav__sp"></div>
+    <div class="nav__r">
+      <a class="btn hide-s" href="login.html">Sign in</a>
+      <a class="btn btn--w" href="register.html">Join event</a>
+      <button class="burger" aria-label="Menu">Menu</button>
+    </div>
+  </div>
+</header>
+
+<main>
+<section class="err-page">
+  <div class="wrap">
+    <div class="err-page__in">
+      <span class="err-code">403</span>
+      <h1>Access denied</h1>
+      <p>You don't have permission to open this page. If you think that's a mistake, ask an organizer.</p>
+      <div class="row2"><a class="btn btn--w" href="dashboard.html">Back to dashboard</a><a class="btn" href="login.html">Sign in</a></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__g">
+      <div class="footer__a">
+        <a href="index.html" class="brand"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3v18"/><path d="M12 11l-6 6"/><path d="M12 11l6 6"/><path d="M8 3h8"/></svg>rootline</a>
+        <p>Secure CTF Hosting and Scoring Platform. A university ethical hacking project.</p>
+        <span class="status"><i></i>All systems operational</span>
+      </div>
+      <div><h4>Platform</h4><ul><li><a href="index.html#platform">Challenge board</a></li><li><a href="index.html#platform">Flag checking</a></li><li><a href="index.html#platform">Scoring</a></li><li><a href="index.html#platform">Activity log</a></li></ul></div>
+      <div><h4>Categories</h4><ul><li><a href="index.html#categories">Web</a></li><li><a href="index.html#categories">Crypto</a></li><li><a href="index.html#categories">Forensics</a></li><li><a href="index.html#categories">Reverse and pwn</a></li></ul></div>
+      <div><h4>Resources</h4><ul><li><a href="rules.html">Rules</a></li><li><a href="rules.html#scope">Authorized targets</a></li><li><a href="rules.html#fair">Fair play</a></li></ul></div>
+      <div><h4>Project</h4><ul><li><a href="#">GitHub</a></li><li><a href="login.html">Sign in</a></li><li><a href="register.html">Register</a></li></ul></div>
+    </div>
+    <div class="footer__b"><span>&copy; 2026 Secure CTF Hosting and Scoring Platform. Authorized targets only.</span><ul><li><a href="rules.html">Rules</a></li></ul></div>
+  </div>
+</footer>
+
+<script src="assets/js/main.js"></script>
+</body>
+</html>
